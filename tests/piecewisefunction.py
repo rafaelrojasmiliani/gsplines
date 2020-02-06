@@ -14,6 +14,13 @@ from gsplines.basis1010 import cBasis1010
 
 
 class cMyTest(unittest.TestCase):
+
+    def __init__(self, *args, **kwargs):
+        super(cMyTest, self).__init__(*args, **kwargs)
+        np.set_printoptions(linewidth=500, precision=4)
+        self.N_ = np.random.randint(3, 10)
+        self.dim_ = np.random.randint(3, 10)
+
     def test(self):
         '''
         '''
@@ -34,9 +41,6 @@ class cMyTest(unittest.TestCase):
             res = pw(t)
 
             assert res.shape[1] == dim and res.shape[0] == t.shape[0]
-
-
-
 
 
 def main():

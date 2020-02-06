@@ -8,9 +8,9 @@ else
     if [ -f "$filename" ]; then
         linnum=$(wc -l $filename  | awk '{print $1}')
         modnum=$(($(find ./tests -name "*.py" | wc -l)-1 ))
-        if [ "$linnum" -ne "$modnum" ]; then
-            rm $filename
-        fi
+#        if [ "$linnum" -ne "$modnum" ]; then
+#            rm $filename
+#        fi
     fi
     if [ ! -f "$filename" ]; then
         touch $filename
@@ -27,8 +27,11 @@ else
     fi 
     readarray  -t modnametime  < $filename
     for linenum in ${!modnametime[@]}; do
+#        echo ${modnametime[$linenum]}
         modulename=$(echo ${modnametime[$linenum]} | sed 's/=.*//')
         moduletesttime=$(echo ${modnametime[$linenum]} | sed 's/.*=//')
+#        echo $moduletesttime
+#        echo '------------------'
         readarray  -t modulefiles  < <(find -name "$modulename.py" | /bin/grep -v tests)
         if [ "${#modulefiles[@]}" -gt "1" ] || [ "${#modulefiles[@]}" -eq "0" ]; then
             :
