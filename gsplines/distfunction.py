@@ -84,7 +84,7 @@ class cDistFunction(object):
         return self.valbuff_
 
     def jacobian(self, _tauv, _wp, _wpidx=[], _dydwbuff=None, _resbuff=None):
-        ''' Returns the jacobian of the function w.r.t. the taus and desired
+        ''' Returns the Jacobian of the function w.r.t. the taus and desired
         waypoints.
             d g(t_i)  d q_j       d g(t_i)  d qd_j    |
             --------  -------  +  --------  --------  |
@@ -156,11 +156,11 @@ class cDistFunction(object):
                     + dg_dqd_ti.dot(dqd_dtaui)
 
             dq_dui = self.qbuff1_
-            dqd_dui = self.qbuff1_
+            dqd_dui = self.qbuff2_
 
             for i_u in range(ulen):
                 for idim in range(self.dim_):
-                    i0 = iintr * 6 * dim + 6 * idim
+                    i0 = jintr * 6 * dim + 6 * idim
                     i1 = i0 + 6
                     dq_dui[idim] = dydwp[i0:i1, i_u].dot(B)
 

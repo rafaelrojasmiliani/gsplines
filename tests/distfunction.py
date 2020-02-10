@@ -150,12 +150,20 @@ class cMyTest(unittest.TestCase):
         dwp = 1.0e-6
         for i, (j, k) in enumerate(wpidx, start=self.N_):
             wp_aux = wp.copy()
-            wp_aux[j, k] += -dwp
-            v0 = df(tauv, wp_aux).copy()
-            wp_aux[j, k] += 2*dwp
-            v1 = df(tauv, wp_aux)
+            wp_aux[j, k] += -3 * dwp
+            v0 = df(tauv, wp_aux).copy() * (-1.0 / 60.0)
+            wp_aux[j, k] += dwp
+            v1 = df(tauv, wp_aux).copy() * (3.0 / 20.0)
+            wp_aux[j, k] += dwp
+            v2 = df(tauv, wp_aux).copy() * (-3.0 / 4.0)
+            wp_aux[j, k] += 2 * dwp
+            v3 = df(tauv, wp_aux).copy() * (3.0 / 4.0)
+            wp_aux[j, k] += dwp
+            v4 = df(tauv, wp_aux).copy() * (-3.0 / 20.0)
+            wp_aux[j, k] += dwp
+            v5 = df(tauv, wp_aux).copy() * (1.0 / 60.0)
 
-            dvdwp_jk = 0.5 * (v1 - v0) / dwp
+            dvdwp_jk = (v0 + v1 + v2 + v3 + v4 + v5) / dwp
 
             err = np.abs(dvdwp_jk - jac[:, i])
 

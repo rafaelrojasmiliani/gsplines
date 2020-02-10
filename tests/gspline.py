@@ -148,42 +148,42 @@ class cMyTest(unittest.TestCase):
             class comparing it with its analitical form optained using sympy
         '''
         print('Test derivative of b w.r.t. waypoint components')
-        for i in range(100):
-            np.random.seed()
-            dim = np.random.randint(1, 8)
-            N = np.random.randint(2, 60)
-            a = np.random.rand()
-            wp = (np.random.rand(N + 1, dim) - 0.5) * 2 * np.pi
-            tauv = np.random.rand(N) * 3.0
-            T = np.sum(tauv)
-            splcalc = cSplineCalc(dim, N, cBasis1010(a))
+        np.random.seed()
+        dim = np.random.randint(1, 8)
+        N = np.random.randint(2, 60)
+        a = np.random.rand()
+        wp = (np.random.rand(N + 1, dim) - 0.5) * 2 * np.pi
+        splcalc = cSplineCalc(dim, N, cBasis1010(a))
 
-            b1 = splcalc.eval_b(wp).copy()
-            wpidx = np.random.randint(0, N + 1)
-            i = np.random.randint(0, dim)
+        dwp = 0.0005
+        for i in range(N + 1):
+            for j in range(dim):
+                wpidx = i
+                i = j
 
-            wpAux = wp.copy()
+                wp_aux = wp.copy()
+                wp_aux[wpidx, i] += -dwp
+                b1 = splcalc.eval_b(wp_aux).copy()
+                wp_aux[wpidx, i] += 2 * dwp
+                b2 = splcalc.eval_b(wp_aux).copy()
 
-            dwp = 0.0005
-            wpAux[wpidx, i] += dwp
+                dbdwpij_num = 0.5 * (b2 - b1) / dwp
 
-            b2 = splcalc.eval_b(wpAux).copy()
+                dbdwpij = splcalc.eval_dbdwpij(wpidx, i)
 
-            dbdwpij_num = (b2 - b1) / dwp
-            dbdwpij = splcalc.eval_dbdwpij(wpidx, i)
+                e = np.max(np.abs(dbdwpij_num - dbdwpij))
 
-            e = np.max(np.abs(dbdwpij_num - dbdwpij))
-
-            if e > 1.0e-8:
-                print('implementation:')
-                print(dbdwpij)
-                print('(b1-b2)/dwp:')
-                print(dbdwpij_num)
-                print('component', i)
-                print('waypoint ', wpidx)
-                print('dimension ', dim)
-                print('number of intervals ', N)
-                raise AssertionError('Error of {:14.7e}'.format(e))
+                if e > 1.0e-8:
+                    print('Erroe in db_dwpij:')
+                    print('implementation:')
+                    print(dbdwpij)
+                    print('(b1-b2)/dwp:')
+                    print(dbdwpij_num)
+                    print('component', i)
+                    print('waypoint ', wpidx)
+                    print('dimension ', dim)
+                    print('number of intervals ', N)
+                    raise AssertionError('Error of {:14.7e}'.format(e))
 
     def test_derivative_y(self):
         ''' Compare the numerical derivate of y w.r.t tau with the nominal one
@@ -232,18 +232,17 @@ class cMyTest(unittest.TestCase):
                 '''.format(e, dydtauiTest[eidx], ep)
 
     def test_derivative_wp(self):
-        ''' Compare the numerical derivate of y w.r.t twp with the nominal one
+        ''' Compare the numerical derivate of y w.r.t waypoints with the nominal one
         '''
-        for i in range(40):
+        for _ in range(4):
             np.random.seed()
-            dim = np.random.randint(1, 3)
-            N = np.random.randint(2, 6)
+            dim = np.random.randint(1, 8)
+            N = np.random.randint(2, 20)
             a = np.random.rand()
             wp = (np.random.rand(N + 1, dim) - 0.5) * 2 * np.pi
             tauv = 0.5 + np.random.rand(N) * 2.0
             splcalc = cSplineCalc(dim, N, cBasis1010(a))
-            dydtauNom, y = splcalc.eval_dydtau(tauv, wp)
-
+            _, y = splcalc.eval_dydtau(tauv, wp)
             y = y.copy()
 
             err = 0.0
@@ -251,30 +250,37 @@ class cMyTest(unittest.TestCase):
 
             err = 0.0
             errp = 0.0
-            dwp = 1.0e-6
-            dydwpNom = np.zeros((y.shape[0], 1))
-            for iteration in range(30):
+            dwp = 1.0e-5
+
+            wpidx = [(i, j) for i in range(N + 1) for j in range(dim)]
+            dydwpNom = np.zeros((y.shape[0], len(wpidx)))
+            dydwpNom, _ = splcalc.eval_dydu(tauv, wp, wpidx, dydwpNom)
+
+            for k, (i, j) in enumerate(wpidx):
                 wp_aux = wp.copy()
-                wpidx = np.random.randint(0, N + 1)
-                wpcom = np.random.randint(0, dim)
+                wpidx = i
+                wpcom = j
 
-                wp_aux[wpidx, wpcom] += -2 * dwp
-                y0 = splcalc.eval_y(tauv, wp_aux).copy() * (1.0 / 12.0)
+                wp_aux[wpidx, wpcom] += -3 * dwp
+                y0 = splcalc.eval_y(tauv, wp_aux).copy() * (-1.0 / 60.0)
                 wp_aux[wpidx, wpcom] += dwp
-                y1 = splcalc.eval_y(tauv, wp_aux).copy() * (-2.0 / 3.0)
+                y1 = splcalc.eval_y(tauv, wp_aux).copy() * (3.0 / 20.0)
+                wp_aux[wpidx, wpcom] += dwp
+                y2 = splcalc.eval_y(tauv, wp_aux).copy() * (-3.0 / 4.0)
                 wp_aux[wpidx, wpcom] += 2 * dwp
-                y2 = splcalc.eval_y(tauv, wp_aux).copy() * (2.0 / 3.0)
+                y3 = splcalc.eval_y(tauv, wp_aux).copy() * (3.0 / 4.0)
                 wp_aux[wpidx, wpcom] += dwp
-                y3 = splcalc.eval_y(tauv, wp_aux).copy() * (-1.0 / 12.0)
+                y4 = splcalc.eval_y(tauv, wp_aux).copy() * (-3.0 / 20.0)
+                wp_aux[wpidx, wpcom] += dwp
+                y5 = splcalc.eval_y(tauv, wp_aux).copy() * (1.0 / 60.0)
 
-                dydwpTest = (y0 + y1 + y2 + y3) / dwp
+                dydwpTest = (y0 + y1 + y2 + y3 + y4 + y5) / dwp
 
-                dydwpNom, _ = splcalc.eval_dydu(tauv, wp, [(wpidx, wpcom)],
-                                                dydwpNom)
-
-                ev = np.abs(dydwpNom[:, 0] - dydwpTest)
+                ev = np.abs(dydwpNom[:, k] - dydwpTest)
                 e = np.max(ev)
                 eidx = np.argmax(ev)
+#                print('{:14.7e} {:14.7e} {:14.7e}'.format(
+#                    e, dydwpNom[eidx, k], dydwpTest[eidx]))
 
                 ep = e / dydwpTest[eidx]
 
@@ -284,7 +290,7 @@ class cMyTest(unittest.TestCase):
                     errp = ep
 
                 if e > 1.0e-4:
-                    assert ep < 1.0e-4, '''
+                    assert ep < 1.0e-8, '''
                     Relative Error   = {:10.3e}
                     Absolute Error   = {:10.3e}
                     '''.format(ep, e)
