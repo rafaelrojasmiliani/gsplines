@@ -10,6 +10,7 @@ from scipy.sparse import csc_matrix
 import unittest
 from gsplines.gspline import cSplineCalc
 from gsplines.basis1010 import cBasis1010
+from gsplines.basis0010 import cBasis0010
 from gsplines.banded import diagonal_form
 
 
@@ -185,28 +186,34 @@ class cMyTest(unittest.TestCase):
                 raise AssertionError('Error of {:14.7e}'.format(e))
 
     def test_derivative_y(self):
+        ''' Compare the numerical derivate of y w.r.t tau with the nominal one
+        '''
         for i in range(40):
             np.random.seed()
             dim = np.random.randint(1, 3)
             N = np.random.randint(2, 6)
             a = np.random.rand()
             wp = (np.random.rand(N + 1, dim) - 0.5) * 2 * np.pi
-            tauv = 0.5 + np.random.rand(N) * 2.0
+            tauv = 1.0 + np.random.rand(N) * 2.0
             splcalc = cSplineCalc(dim, N, cBasis1010(a))
             dydtauNom, y = splcalc.eval_dydtau(tauv, wp)
 
             y = y.copy()
 
-            dtau = 0.000005
+            dtau = 1.0e-8
             err = 0.0
             errp = 0.0
             for iinter in range(0, N):
                 tauv_aux = tauv.copy()
-                tauv_aux[iinter] -= dtau
-                y0 = splcalc.eval_y(tauv_aux, wp).copy()
+                tauv_aux[iinter] += -2 * dtau
+                y0 = splcalc.eval_y(tauv_aux, wp).copy() * (1.0 / 12.0)
+                tauv_aux[iinter] += dtau
+                y1 = splcalc.eval_y(tauv_aux, wp).copy() * (-2.0 / 3.0)
                 tauv_aux[iinter] += 2 * dtau
-                y1 = splcalc.eval_y(tauv_aux, wp).copy()
-                dydtauiTest = 0.5 * (y1 - y0) / dtau
+                y2 = splcalc.eval_y(tauv_aux, wp).copy() * (2.0 / 3.0)
+                tauv_aux[iinter] += dtau
+                y3 = splcalc.eval_y(tauv_aux, wp).copy() * (-1.0 / 12.0)
+                dydtauiTest = (y0 + y1 + y2 + y3) / dtau
                 ev = np.abs(dydtauiTest - dydtauNom[:, iinter])
                 e = np.max(ev)
                 eidx = np.argmax(ev)
@@ -218,17 +225,15 @@ class cMyTest(unittest.TestCase):
                 if ep > errp:
                     errp = ep
 
-                if ep > 1.0e-4:
-                    print(ev)
-                    print(dydtauiTest)
-                    print(dydtauNom[:, iinter])
-                    print(e)
-                    print(eidx)
+                assert ep < 5.0e-2, '''
+                error on dydtau = {:10.7e}
+                value of dydtau = {:10.7e}
+                relative error  = {:10.7e}
+                '''.format(e, dydtauiTest[eidx], ep)
 
-                assert ep < 1.0e-4
-
-#            print('Maximum Error for dy dtau          = {:14.7e}'.format(err))
-#            print('Maximum Relative Error for dy dtau = {:14.7e}'.format(errp))
+    def test_derivative_wp(self):
+        ''' Compare the numerical derivate of y w.r.t twp with the nominal one
+        '''
         for i in range(40):
             np.random.seed()
             dim = np.random.randint(1, 3)
@@ -241,13 +246,12 @@ class cMyTest(unittest.TestCase):
 
             y = y.copy()
 
-            dtau = 0.000005
             err = 0.0
             errp = 0.0
 
             err = 0.0
             errp = 0.0
-            dwp = 0.0000001
+            dwp = 1.0e-6
             dydwpNom = np.zeros((y.shape[0], 1))
             for iteration in range(30):
                 wp_aux = wp.copy()
@@ -286,11 +290,58 @@ class cMyTest(unittest.TestCase):
                     '''.format(ep, e)
 
 
-
 #            print('Maximum Error for dy dwp           = {:14.7e}'.format(err))
 #            print('Maximum Relative Error for dy dwp  = {:14.7e}'.format(errp))
 
 #                assert e < 5.0e-2, 'error = {:14.7e}'.format(e)
+
+    def test_derivative_y_2(self):
+        ''' Second test for the derivative of y wr.t. tau.
+        First test the identity A*dydtau + dAdtau y = 0A
+        Second test the identity of above using basis
+        '''
+        for i in range(40):
+            np.random.seed()
+            dim = np.random.randint(1, 3)
+            N = np.random.randint(2, 6)
+            a = np.random.rand()
+            wp = (np.random.rand(N + 1, dim) - 0.5) * 2 * np.pi
+            tauv = 0.5 + np.random.rand(N) * 2.0
+            splcalc = cSplineCalc(dim, N, cBasis0010())
+            basis = splcalc.basis_
+            dydtauNom, y = splcalc.eval_dydtau(tauv, wp)
+            A = splcalc.eval_A(tauv).todense()
+            y = y.copy()
+
+            # A*dydtau + dAdtau y = 0
+            for i, _ in enumerate(tauv):
+                v0 = A.dot(dydtauNom[:, i])
+                v1 = splcalc.eval_dAdtiy(tauv, i, y).todense()
+                res = v0 + v1.T
+                e = np.abs(res)
+
+                assert np.max(e) < 1.0e-10, '''
+                e = {:14.7e}
+                '''.format(e)
+
+            for i, taui in enumerate(tauv):
+
+                B = basis.evalDerivOnWindow(-1, taui, 0)
+                dB_dtau = basis.evalDerivWrtTauOnWindow(-1, taui, 0)
+
+                for idim in range(dim):
+                    i0 = i * 6 * dim + 6 * idim
+                    i1 = i0 + 6
+                    e = dydtauNom[i0:i1, i].dot(B) + y[i0:i1].dot(dB_dtau)
+
+                    assert np.abs(e) < 1.0e-10, '''
+                    error computing dydtau^\\top B + y^\\top dB_dtau
+                    e            = {:14.7e}
+                    index of tau = {:d}
+                    index of q   = {:d}
+                    i0           = {:d}
+                    i1           = {:d}
+                    '''.format(e, i, idim, i0, i1)
 
     def eval_A(self, tau, _dim, _N, _basis):
         """

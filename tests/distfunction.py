@@ -36,6 +36,10 @@ def debug_on(*exceptions):
 class scalarmap(object):
     def __init__(self):
         self.dim_ = 0
+        np.set_printoptions(
+            linewidth=5000000,
+            formatter={'float': '{:+10.3e}'.format},
+            threshold=sys.maxsize)
         pass
 
     def __call__(self, q, qd):
@@ -65,7 +69,7 @@ class cMyTest(unittest.TestCase):
             self.N_,
         )
         tauv = np.random.rand(self.N_)
-        ti, si, iintr = df.getTimes(tauv)
+        ti, si, iintr, _ = df.getTimes(tauv)
 
     @debug_on()
     def testCall(self):
@@ -93,7 +97,7 @@ class cMyTest(unittest.TestCase):
         tauv = 0.5 + np.random.rand(self.N_)
         wp = np.random.rand(self.N_ + 1, self.dim_)
         v = df(tauv, wp)
-        tis, sis, iints = df.getTimes(tauv)
+        tis, sis, iints, _ = df.getTimes(tauv)
         q = df.splcalc_.getSpline(tauv, wp)
 
         qt = q(tis)
@@ -121,7 +125,7 @@ class cMyTest(unittest.TestCase):
 
         g = myScalarmap()
         df = cDistFunction(g, self.N_)
-        tauv = 0.5 + np.random.rand(self.N_)
+        tauv = 0.5 + np.random.rand(self.N_)/2.0
         wp = np.random.rand(self.N_ + 1, self.dim_)
 
         wpidx = [(i, j) for i in range(self.N_ + 1) for j in range(dim)]
@@ -141,7 +145,23 @@ class cMyTest(unittest.TestCase):
 
             e = np.max(err)
 
-            assert e < 1.0e-10
+            assert e < 1.0e-6
+
+        dwp = 1.0e-6
+        for i, (j, k) in enumerate(wpidx, start=self.N_):
+            wp_aux = wp.copy()
+            wp_aux[j, k] += -dwp
+            v0 = df(tauv, wp_aux).copy()
+            wp_aux[j, k] += 2*dwp
+            v1 = df(tauv, wp_aux)
+
+            dvdwp_jk = 0.5 * (v1 - v0) / dwp
+
+            err = np.abs(dvdwp_jk - jac[:, i])
+
+            e = np.max(err)
+
+            assert e < 1.0e-6
 
 
 def main():

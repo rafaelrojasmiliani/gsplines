@@ -38,7 +38,7 @@ class cBasis0010(object):
 
         if _deg == 0:
             self.buff_.fill(0.0)
-            return self.buff_
+            return self.buff_.copy()
         v0 = self.evalDerivOnWindow(_s, _tau, _deg)
         v0 *= -0.5 * _deg * (2.0 / _tau)
         return np.ravel(v0)
@@ -119,7 +119,7 @@ class cBasis0010canonic(object):
         self.buff_[4] = (np.sqrt(3) / 192.0) * s4 * taui52
         s5 = s4 * s
         self.buff_[5] = (np.sqrt(5) / 320.0) * taui52 * (s5 - 10.0 / 3.0 * s3)
-        return self.buff_
+        return self.buff_.copy()
 
     def evalDerivWrtTauOnWindow(self, _s, _tau, _deg=1):
         """Eval on window evaluate in [-1, 1] returns the first derivate wrt
@@ -129,7 +129,7 @@ class cBasis0010canonic(object):
 
         if _deg == 0:
             self.buff_.fill(0.0)
-            return self.buff_
+            return self.buff_.copy()
         v0 = self.evalDerivOnWindow(_s, _tau, _deg)
         v0 *= (5.0/2.0 - _deg) / _tau
         return np.ravel(v0)
