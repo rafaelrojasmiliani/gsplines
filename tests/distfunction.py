@@ -1,11 +1,10 @@
 """
 """
 import numpy as np
-from matplotlib import pyplot as plt
 import sympy as sp
 import unittest
 from gsplines.gspline import cSplineCalc
-from gsplines.distfunction import cDistFunction
+from gsplines.distfunction import cDistFunction, cDistSpeed
 from gsplines.basis1010 import cBasis1010
 
 import functools
@@ -170,6 +169,10 @@ class cMyTest(unittest.TestCase):
             e = np.max(err)
 
             assert e < 1.0e-6
+
+    @debug_on()
+    def testSpeed(self):
+        pass
 
 
 def main():

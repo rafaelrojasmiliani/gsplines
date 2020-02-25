@@ -6,8 +6,6 @@ from time import process_time
 import numpy as np
 from scipy.sparse import csc_matrix
 from scipy.sparse.linalg import spsolve
-from matplotlib import pyplot as plt
-from scipy.linalg import solve_banded
 import copy as cp
 
 

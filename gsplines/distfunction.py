@@ -89,8 +89,8 @@ class cDistFunction(object):
             d g(t_i)  d q_j       d g(t_i)  d qd_j    |
             --------  -------  +  --------  --------  |
             d q_j     d tau_k     d qd_j     d tau_k  |
-            d g(t_i)  d q_j       d g(t_i)  d qd_j   
-            --------  -------  +  --------  -------- 
+            d g(t_i)  d q_j       d g(t_i)  d qd_j
+            --------  -------  +  --------  --------
             d q_j     d wp_k      d qd_j     d wp_k
 
         '''
@@ -170,3 +170,37 @@ class cDistFunction(object):
                     + dg_dqd_ti.dot(dqd_dui)
 
         return _resbuff
+
+
+class __speedScalar(object):
+    def __init__(self, _idx, _dim):
+        self.dim_ = _dim
+        self.idx_ = _idx
+        self.buff1_ = np.zeros((_dim, ))
+        self.buff2_ = np.zeros((_dim, ))
+
+    def __call__(self, _q, _qd):
+        return _q[self.idx_]
+
+    def deriv_wrt_q(self, _q, _qd):
+        self.buff1_.fill(0.0)
+        return self.buff1_
+
+    def deriv_wrt_qd(self, _q, _qd):
+        self.buff1_.fill(0.0)
+        self.buff1_[self.idx_] = 1.0
+        return self.buff1_
+
+
+class cDistSpeed(cDistFunction):
+    def __init__(self,
+                 _idx,
+                 _dim, 
+                 _N,
+                 _basis=cBasis0010(),
+                 _points=np.arange(-1, 1, 0.1),
+                 _wpidx=[]):
+
+        speed = __speedScalar(_idx, _dim)
+        
+        super().__init__(self, speed, _N, _basis, _points, _wpidx)

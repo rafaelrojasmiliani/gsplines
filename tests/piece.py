@@ -5,7 +5,6 @@
     \int_{-1}^{1} (2/tau) \alpha dq/ds + (2/tau)^5 (1-\alpha) d^3 q / ds^3 dt
 """
 import numpy as np
-from matplotlib import pyplot as plt
 import sympy as sp
 import unittest
 from gsplines.basis1010 import cBasis1010
