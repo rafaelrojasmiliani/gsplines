@@ -7,7 +7,7 @@ RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --no-install-recommends -o Dpkg::Options::="--force-confnew"
 # Install numpy and scipy
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends -o Dpkg::Options::="--force-confnew" \
-                    python3-pip
+                    python3-pip git
 RUN pip3 install setuptools
 RUN pip3 install numpy
 RUN pip3 install sympy
