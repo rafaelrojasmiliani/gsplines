@@ -47,6 +47,31 @@ class cBasis0010(object):
         aux = 2.0 / _tau
         return np.linalg.matrix_power(aux * self.Dmat_, _deg)
 
+    def l2_norm(self, _tau, _Q, _deg=0):
+        _Q.fill(0.0)
+        if _deg == 0:
+            raise ValueError()
+        elif _deg == 1:
+            _Q[:, :] = np.array([[0, 0, 0, 0, 0, 0], 
+                                 [0, 2, 0, 2, 0, 2],
+                                 [0, 0, 6, 0, 6, 0], 
+                                 [0, 2, 0, 12, 0, 12],
+                                 [0, 0, 6, 0, 20, 0], 
+                                 [0, 2, 0, 12, 0, 30]], dtype=np.float)
+
+            _Q *= 2.0/_tau
+
+        elif _deg == 2:
+            raise ValueError()
+        elif _deg == 3:
+            _Q[3, 3] = 450.0
+            _Q[3, 5] = 3150.0
+            _Q[5, 3] = 3150.0
+            _Q[4, 4] = 7350.0
+            _Q[5, 5] = 61740.0
+            _Q *= np.power(2.0 / _tau, 5.0)
+        else:
+            raise ValueError()
 
 def getDmatLeg(n):
     ''' Compute the derivative matrix for

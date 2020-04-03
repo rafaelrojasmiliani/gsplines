@@ -3,6 +3,10 @@
 """
 import copy as cp
 import numpy as np
+from .basis1010utils import compute_Qd1_block
+from .basis1010utils import compute_Qd1_dtau_block
+from .basis1010utils import compute_Qd3_block
+from .basis1010utils import compute_Qd3_dtau_block
 
 
 class cBasis1010(object):
@@ -59,6 +63,7 @@ class cBasis1010(object):
         self.buff_[2] = cosp / expp
         self.buff_[3] = sinp / expp
         self.buff_[4] = p
+        self.buff_[5] = 1.0
 
         return self.buff_
 
@@ -74,6 +79,22 @@ class cBasis1010(object):
         v0 = self.evalOnWindow(_s, _tau)
         v1 = np.ravel(aux * np.linalg.matrix_power(self.Dmat_, _deg).dot(v0))
         return np.ravel(k * _s * self.Dmat_.dot(v1))
+
+
+    def l2_norm(self, _tau, _Q, _deg=0):
+        _Q.fill(0.0)
+        alpha = self.params_
+        if _deg == 0:
+            raise ValueError()
+        elif _deg == 1:
+            compute_Qd1_block(_tau, alpha, _Q)
+        elif _deg == 2:
+            raise ValueError()
+        elif _deg == 3:
+            compute_Qd3_block(_tau, alpha, _Q)
+        else:
+            raise ValueError()
+
 
 
 #class cPiece1010(object):

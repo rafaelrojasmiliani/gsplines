@@ -5,7 +5,7 @@ import numpy as np
 import sympy as sp
 import unittest
 from gsplines.basis0010 import cBasis0010
-
+    
 class cMyTest(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         ''' Initialize the symbolic expression of the Legendre Polynomials
@@ -88,6 +88,41 @@ class cMyTest(unittest.TestCase):
             assert (
                 e < 5.0e-2
             ), 'Large error on derivatives wrt tau error = {:+.3e}'.format(e)
+
+
+    def test_l2_norms(self):
+        ''' Test L2 norms '''
+        tau = np.random.rand()*5.0
+        Bimpl = cBasis0010()
+        Qd3 = np.zeros((6, 6))
+        Qd1 = np.zeros((6, 6))
+        Bimpl.l2_norm(tau, Qd3, 3)
+        Bimpl.l2_norm(tau, Qd1, 1)
+        y = np.random.rand(Bimpl.dim_)
+
+        def qd3norm2(s):
+            res = Bimpl.evalDerivOnWindow(s, tau, 3).dot(y)
+            return np.power(res, 2.0)*tau/2.0
+        def qd1norm2(s):
+            res = Bimpl.evalDerivOnWindow(s, tau, 1).dot(y)
+            return np.power(res, 2.0)*tau/2.0
+
+        dt = 5.0e-6
+        for f, Q in [(qd1norm2, Qd1), (qd3norm2, Qd3)]:
+            fv = np.array([f(t) for t in np.arange(-1, 1, dt)])
+            Itest = np.sum(fv[1:]+fv[:-1])*dt/2.0
+
+
+
+            Inom = Q.dot(y).dot(y)
+
+            err = np.abs(Itest - Inom)
+            assert err < 5.0e-2, '''
+            Error in integral = {:.4f}
+            Nominal integral = {:.4f}
+            Test integral = {:.4f}
+            '''.format(err, Inom, Itest)
+
 
 def main():
     unittest.main()

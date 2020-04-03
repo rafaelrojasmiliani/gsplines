@@ -59,6 +59,40 @@ class cMyTest(unittest.TestCase):
             assert (e < 1.0e-10)
 
 
+    def test_l2_norms(self):
+        ''' Test L2 norms '''
+        tau = np.random.rand()*5.0
+        a = 0.9
+        Bimpl = cBasis1010(a)
+        Qd3 = np.zeros((6, 6))
+        Qd1 = np.zeros((6, 6))
+        Bimpl.l2_norm(tau, Qd1, 1)
+        Bimpl.l2_norm(tau, Qd3, 3)
+        y = np.random.rand(Bimpl.dim_)
+
+        def qd3norm2(s):
+            res = Bimpl.evalDerivOnWindow(s, tau, 3).dot(y)
+            return np.power(res, 2.0)*tau/2.0
+        def qd1norm2(s):
+            res = Bimpl.evalDerivOnWindow(s, tau, 1).dot(y)
+            return np.power(res, 2.0)*tau/2.0
+
+        dt = 5.0e-5
+        i = 0
+        for f, Q in [(qd1norm2, Qd1), (qd3norm2, Qd3)]:
+            i += 1
+            fv = np.array([f(t) for t in np.arange(-1, 1, dt)])
+            Itest = np.sum(fv[1:]+fv[:-1])*dt/2.0
+
+            Inom = Q.dot(y).dot(y)
+
+            err = np.abs(Itest - Inom)
+            assert err < 5.0e-2, '''
+            Error in integral = {:.4f}
+            Nominal integral = {:.4f}
+            Test integral = {:.4f}
+            Error in {:d}
+            '''.format(err, Inom, Itest, i)
 def main():
     unittest.main()
 

@@ -8,6 +8,7 @@ import sympy as sp
 import unittest
 from gsplines.piecewisefunction import cPiecewiseFunction
 from gsplines.basis1010 import cBasis1010
+from gsplines.basis0010 import cBasis0010
 
 
 
@@ -23,7 +24,6 @@ class cMyTest(unittest.TestCase):
     def test(self):
         '''
         '''
-        np.set_printoptions(linewidth=500, precision=4)
 
         for i in range(10):
             dim = np.random.randint(1, 20)
@@ -41,6 +41,33 @@ class cMyTest(unittest.TestCase):
 
             assert res.shape[1] == dim and res.shape[0] == t.shape[0]
 
+    def test_l2_norms(self):
+        ''' Test L2 norm'''
+        B1 = cBasis0010()
+        alpha = np.random.rand()
+        B2 = cBasis1010(alpha)
+        N = self.N_
+        dim = self.dim_
+        y = np.random.rand(6*dim*N)
+        tauv = np.random.rand(N)
+        T = np.sum(tauv)
+        dt = 0.001
+        
+        pw = cPiecewiseFunction(tauv, y, dim, B1)
+
+        f = pw.deriv(3)
+        fv = np.array([np.linalg.norm(f(t))**2 for t in np.arange(0, T, dt)])
+        print(fv)
+
+        Itest = np.sum(fv[1:]+fv[:-1])*dt/2.0
+        Inom = pw.l2_norm(3)
+
+        err = np.abs(Itest - Inom)
+        assert err < 5.0e-2, '''
+        Error in integral = {:.4f}
+        Nominal integral = {:.4f}
+        Test integral = {:.4f}
+        '''.format(err, Inom, Itest)
 
 def main():
     unittest.main()
