@@ -9,6 +9,7 @@ import unittest
 from gsplines.piecewisefunction import cPiecewiseFunction
 from gsplines.basis1010 import cBasis1010
 from gsplines.basis0010 import cBasis0010
+from gsplines.basis1000 import cBasis1000
 
 
 
@@ -43,24 +44,22 @@ class cMyTest(unittest.TestCase):
 
     def test_l2_norms(self):
         ''' Test L2 norm'''
-        B1 = cBasis0010()
-        alpha = np.random.rand()
-        B2 = cBasis1010(alpha)
+        B = cBasis1000()
+        bdim = B.dim_
         N = self.N_
         dim = self.dim_
-        y = np.random.rand(6*dim*N)
+        y = np.random.rand(bdim*dim*N)
         tauv = np.random.rand(N)
         T = np.sum(tauv)
-        dt = 0.001
         
-        pw = cPiecewiseFunction(tauv, y, dim, B1)
+        pw = cPiecewiseFunction(tauv, y, dim, B)
 
-        f = pw.deriv(3)
+        f = pw
+        dt = 0.001
         fv = np.array([np.linalg.norm(f(t))**2 for t in np.arange(0, T, dt)])
-        print(fv)
 
         Itest = np.sum(fv[1:]+fv[:-1])*dt/2.0
-        Inom = pw.l2_norm(3)
+        Inom = pw.l2_norm()
 
         err = np.abs(Itest - Inom)
         assert err < 5.0e-2, '''

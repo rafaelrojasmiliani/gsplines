@@ -44,4 +44,14 @@ class cBasis1000(object):
         aux = 2.0 / _tau
         return np.linalg.matrix_power(aux * self.Dmat_, _deg)
 
+    def l2_norm(self, _tau, _Q, _deg=0):
+        _Q.fill(0.0)
+        if _deg == 0:
+            _Q[:, :] = np.array([[2.0, 0.0], 
+                                 [0.0, 2.0/3.0]], dtype=np.float)
+            _Q *= _tau/2.0
+        elif _deg == 1:
+            _Q[:, :] = np.array([[0.0, 0.0], 
+                                 [0.0, 2.0]], dtype=np.float)
 
+            _Q *= 2.0/_tau
