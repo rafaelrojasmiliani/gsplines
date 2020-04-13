@@ -83,8 +83,8 @@ class cMyTest(unittest.TestCase):
 
 
     def test_derivative_wp(self):
-        ''' Compare the numerical derivate of y w.r.t waypoints with the nominal one
-        '''
+        ''' Compare the numerical derivate of y w.r.t
+        waypoints with the nominal one'''
         for _ in range(4):
             tauv = 0.5 + np.random.rand(self.N_) * 2.0
             splcalc = cSplineCalc_2(self.dim_, self.N_, cBasis1000())
