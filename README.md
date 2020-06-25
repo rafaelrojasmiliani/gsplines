@@ -29,5 +29,6 @@ It may be proven that any optimal of (1) solves the following linear ODE, which 
 </p>
 with the following boundary conditions
 <p align="center">
-<img src="https://render.githubusercontent.com/render/math?math=\mathbf{q}(t_i) = \mathbf{w}_i\ \ \ \ \ \ \ \mathbf{q}(t_{i%2B1}) = \mathbf{w}_{i%2B1}">
+<img src="https://render.githubusercontent.com/render/math?math=\mathbf{q}(t_i) = \mathbf{w}_i\ \ \ \ \ \ \ \mathbf{q}(t_{i%2B1}) = \mathbf{w}_{i%2B1}\ \ \ \ \ \ \ \ \ \ \ \ \ \ (3)">
 </p>
+Because the ODE (2) is linear, we can compute its general suction depending on the value of the coefficients <img src="https://render.githubusercontent.com/render/math?math=\alpha_i">.
