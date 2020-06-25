@@ -23,7 +23,7 @@ This library provides a uniform and simple interface to formulate gradient-based
 
 This library is aimed to find a trajectory passing trough a sequence of waypoints <img src="https://render.githubusercontent.com/render/math?math=\{\mathbf{w}_0, ...,\mathbf{w}_{N+1}\}"> such that the following integral is minized
 <p align="center">
-<img src="https://render.githubusercontent.com/render/math?math=\Large \int_0^T \alpha_1\left\|\frac{\mathsf{d}\mathbf{q}}{\mathsf{d} t }\right\|^2 %2B \alpha_2 \left\|\frac{\mathsf{d}^2\mathbf{q}}{\mathsf{d} t^2 }\right\|^2 %2B \alpha_3\left\|\frac{\mathsf{d}^3\mathbf{q}}{\mathsf{d} t^3 }\right\|^2 %2B  \alpha_4\left\|\frac{\mathsf{d}^4\mathbf{q}}{\mathsf{d} t^4 }\right\|^2 \mathsf{d} t \ \ \ \ \ (1)">
+<img src="https://render.githubusercontent.com/render/math?math=\Large I=\int_0^T \alpha_1\left\|\frac{\mathsf{d}\mathbf{q}}{\mathsf{d} t }\right\|^2 %2B \alpha_2 \left\|\frac{\mathsf{d}^2\mathbf{q}}{\mathsf{d} t^2 }\right\|^2 %2B \alpha_3\left\|\frac{\mathsf{d}^3\mathbf{q}}{\mathsf{d} t^3 }\right\|^2 %2B  \alpha_4\left\|\frac{\mathsf{d}^4\mathbf{q}}{\mathsf{d} t^4 }\right\|^2 \mathsf{d} t \ \ \ \ \ (1)">
 </p>
 It may be proven that such a problem can be subdivided in two steps
 
@@ -49,13 +49,18 @@ In fact, the general solution of (2) may be written as a piecewise function defi
 <img src="https://render.githubusercontent.com/render/math?math=\mathbf{q} = \sum_{i=1}^{n_b} \mathbf{y}_i^j B_i(t) \ \ \ \ \text{if}\ \ \ \ t \in [t_{j}, t_{j %2B 1}]\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (4)">
 </p>
 
-where <img src="https://render.githubusercontent.com/render/math?math=n_b">, <img src="https://render.githubusercontent.com/render/math?math=B_i(t)"> depend on the coefficients <img src="https://render.githubusercontent.com/render/math?math=\alpha_i"> and <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}_i^j"> are column vectors in which represents the curve uniquely at the interval <img src="https://render.githubusercontent.com/render/math?math=[t_j, t_{j %2B 1}">.
+where <img src="https://render.githubusercontent.com/render/math?math=n_b">, <img src="https://render.githubusercontent.com/render/math?math=B_i(t)"> depend on the coefficients <img src="https://render.githubusercontent.com/render/math?math=\alpha_i"> and <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}_i^j"> are column vectors in which represents the curve uniquely at the interval <img src="https://render.githubusercontent.com/render/math?math=[t_j, t_{j %2B 1}]">.
 
 If we stack the column vectors <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}_i^j"> in a suitable way we obtain the column vector <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}"> used in (0). In fact, the equation (0) is obtained after applying to (4) the waypoint constrains and the boundary conditions.
 
+If we substitute (4) in (1) we obtain the following expression
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=I=\mathbf{y}^\top \mathbf{Q}(\boldsymbol{\tau}) \mathbf{y}\ \ \ \ \ \ \ \ \ \ \ \ \ (5)">
+</p>
+
 # Software architecture
 
-    From the formalization of the optimization problem, we derive that a flexible and uniform methodology for the construction of the optimization problem (1) may consists 
+From the formalization of the optimization problem, we derive that a flexible and uniform methodology for the construction of the optimization problem (1) may consists 
 # Requirements
 
 - numpy
