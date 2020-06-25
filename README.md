@@ -44,12 +44,14 @@ with the following boundary conditions
 </p>
 Because the ODE (2) is linear, we can compute its general suction depending on the value of the coefficients <img src="https://render.githubusercontent.com/render/math?math=\alpha_i">.
 
-In fact, the general solution of (2) may be written as 
+In fact, the general solution of (2) may be written as a piecewise function defined at each interval as
 <p align="center">
 <img src="https://render.githubusercontent.com/render/math?math=\mathbf{q} = \sum_{i=1}^{n_b} \mathbf{y}_i^j B_i(t) \ \ \ \ \text{if}\ \ \ \ t \in [t_{j}, t_{j %2B 1}]\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (4)">
 </p>
 
-where <img src="https://render.githubusercontent.com/render/math?math=n_b">, <img src="https://render.githubusercontent.com/render/math?math=B_i(t)"> depend on the coefficients <img src="https://render.githubusercontent.com/render/math?math=\alpha_i"> and <img src="https://render.githubusercontent.com/render/math?math=\mathbf{a}_i"> are column vectors in 
+where <img src="https://render.githubusercontent.com/render/math?math=n_b">, <img src="https://render.githubusercontent.com/render/math?math=B_i(t)"> depend on the coefficients <img src="https://render.githubusercontent.com/render/math?math=\alpha_i"> and <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}_i^j"> are column vectors in which represents the curve uniquely at the interval <img src="https://render.githubusercontent.com/render/math?math=[t_j, t_{j %2B 1}">.
+
+If we stack the column vectors <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}_i^j"> in a suitable way we obtain the column vector <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}"> used in (0). In fact, the equation (0) is obtained after applying to (4) the waypoint constrains and the boundary conditions.
 
 # Software architecture
 
