@@ -71,6 +71,17 @@ From the formalization of the optimization problem, we derive that a flexible an
 In fact, note that the input of any gradient-based optimizer is the expression (6)  and its derivatives. 
 This library provides a template class to represent the basis <img src="https://render.githubusercontent.com/render/math?math=B_i(t)"> and a series of procedures which utilizes these basis as an input and then generate (0), (6) and their derivatives.
 
+## Implemented basis
+Up to now we have implemented tree types of basis
+- Basis for the minimum jerk problems, called `cBasis0010`, because their optimize only the L2-norm of the jerk
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\Large I=\int_0^T  \left\|\frac{\mathsf{d}^3\mathbf{q}}{\mathsf{d} t^3 }\right\|^2">
+</p>
+
+- Basis for the weighed speed-jerk problems, called `cBasis1010`, because their optimize only the L2-norm of the jerk
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\Large I=\int_0^T \alpha  \left\|\frac{\mathsf{d}^3\mathbf{q}}{\mathsf{d} t^3 }\right\|^2 %2B (\alpha-1)\left\|\frac{\mathsf{d}^3\mathbf{q}}{\mathsf{d} t^3 }\right\|^2">
+</p>
 # Requirements
 
 - numpy
