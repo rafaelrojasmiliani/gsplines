@@ -46,12 +46,14 @@ Because the ODE (2) is linear, we can compute its general suction depending on t
 
 In fact, the general solution of (2) may be written as 
 <p align="center">
-<img src="https://render.githubusercontent.com/render/math?math=\mathbf{q} = \sum_{i=1}^{n_b} \mathbf{a}_i B_i(t) (4)">
+<img src="https://render.githubusercontent.com/render/math?math=\mathbf{q} = \sum_{i=1}^{n_b} \mathbf{y}_i^j B_i(t) \text{if} t \in [t_{j}, t_{j %B1 1}]\ \ \ \ \ \ \ \ \ \ \ (4)">
 </p>
 
-where <img src="https://render.githubusercontent.com/render/math?math=n_b"> and <img src="https://render.githubusercontent.com/render/math?math=B_i(t)"> depend on the coefficients <img src="https://render.githubusercontent.com/render/math?math=\alpha_i">.
+where <img src="https://render.githubusercontent.com/render/math?math=n_b">, <img src="https://render.githubusercontent.com/render/math?math=B_i(t)"> depend on the coefficients <img src="https://render.githubusercontent.com/render/math?math=\alpha_i"> and <img src="https://render.githubusercontent.com/render/math?math=\mathbf{a}_i"> are column vectors in 
 
+# Software architecture
 
+    From the formalization of the optimization problem, we derive that a flexible and uniform methodology for the construction of the optimization problem (1) may consists 
 # Requirements
 
 - numpy
