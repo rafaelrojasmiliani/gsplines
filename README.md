@@ -9,7 +9,7 @@ Generalized splines trajectories arising in such kind of optimization problems a
 Moreover, such a relation is synthesised in the expression of the type
 
 <p align="center">
-<img src="https://render.githubusercontent.com/render/math?math=\mathbf{A}(\boldsymbol\tau)">
+<img src="https://render.githubusercontent.com/render/math?math=\mathbf{A}(\boldsymbol\tau)\mathbf{y} = \mathbf{\mathbf{w}}">
 </p>
 
 
