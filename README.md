@@ -13,4 +13,4 @@ The important fact is that se can identify a generlized spline with a point in R
  ```math
  SE = \frac{\sigma}{\sqrt{n}}
  ```
-
+<img src="https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1">
