@@ -25,5 +25,5 @@ The step 1. is done by solving a linear ordinary differential equation. One meth
 ## Optimal curvees
 
 <p align="center">
-<img src="https://render.githubusercontent.com/render/math?math=\Large \int_0^T \left\|\frac{\mathsf{d}\mathbf{q}}{\mathsf{d} t }\right\|^2 %2B \left\|\frac{\mathsf{d}^2\mathbf{q}}{\mathsf{d} t^2 }\right\|^2 %2B \left\|\frac{\mathsf{d}^3\mathbf{q}}{\mathsf{d} t^3 }\right\|^2 %2B \left\|\frac{\mathsf{d}^4\mathbf{q}}{\mathsf{d} t^4 }\right\|^2 \mathsf{d} t \ \ \ \ \ (1)">
+<img src="https://render.githubusercontent.com/render/math?math=-\alpha_1\frac{\mathsf{d}^2\mathbf{q}}{\mathsf{d} t^2 } %2B \alpha_2 \frac{\mathsf{d}^4\mathbf{q}}{\mathsf{d} t^4 } - \alpha_3\frac{\mathsf{d}^6\mathbf{q}}{\mathsf{d} t^6 } %2B  \alpha_4 \frac{\mathsf{d}^8\mathbf{q}}{\mathsf{d} t^8 } \ \ \ \ \ (2)">
 </p>
