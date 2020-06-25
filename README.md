@@ -9,8 +9,10 @@ Generalized splines trajectories arising in such kind of optimization problems a
 Moreover, such a relation is synthesised in the expression of the type
 
 <p align="center">
-<img src="https://render.githubusercontent.com/render/math?math=\mathbf{A}(\boldsymbol\tau)\mathbf{y} = \mathbf{\mathbf{w}}">
+<img src="https://render.githubusercontent.com/render/math?math=\mathbf{A}(\boldsymbol\tau)\mathbf{y} = \mathbf{b}{\mathbf{w}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ (0)">
 </p>
+
+where <img src="https://render.githubusercontent.com/render/math?math=\mathbf{A}(\boldsymbol\tau)"> is a matrix which depends on the time intervals <img src="https://render.githubusercontent.com/render/math?math=\boldsymbol\tau"> and <img src="https://render.githubusercontent.com/render/math?math=\mathbf{b}{\mathbf{w}}"> is a column vector which depends on the waypoints <img src="https://render.githubusercontent.com/render/math?math=\mathbf{w}"> and <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}"> is a column vector which represents uniquely the curve at each interval.
 
 
 # Background
