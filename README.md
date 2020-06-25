@@ -35,5 +35,5 @@ with the following boundary conditions
 Because the ODE (2) is linear, we can compute its general suction depending on the value of the coefficients <img src="https://render.githubusercontent.com/render/math?math=\alpha_i">.
 In fact, the general solution of (2) may be written as
 <p align="center">
-<img src="https://render.githubusercontent.com/render/math?math= \mathbf{q} = \sum_{i=1}^{n_b} \mathbf{a}_i B_i(t) (4)">
+<img src="https://render.githubusercontent.com/render/math?math=\mathbf{q} = \sum_{i=1}^{n_b} \mathbf{a}_i B_i(t) (4)">
 </p>
