@@ -53,14 +53,14 @@ where <img src="https://render.githubusercontent.com/render/math?math=n_b">, <im
 
 If we stack the column vectors <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}_i^j"> in a suitable way we obtain the column vector <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}"> used in (0). In fact, the equation (0) is obtained after applying to (4) the waypoint constrains and the boundary conditions.
 
-If we substitute (4) in (1) we obtain the following expression
+After substituting (4) in (1) we obtain the following expression
 <p align="center">
 <img src="https://render.githubusercontent.com/render/math?math=I=\mathbf{y}^\top \mathbf{Q}(\boldsymbol{\tau}) \mathbf{y}\ \ \ \ \ \ \ \ \ \ \ \ \ (5)">
 </p>
 
 # Software architecture
 
-From the formalization of the optimization problem, we derive that a flexible and uniform methodology for the construction of the optimization problem (1) may consists 
+From the formalization of the optimization problem, we derive that a flexible and uniform methodology for the construction of the optimization problem (1) may consists in designing an abstract representation of the basis <img src="https://render.githubusercontent.com/render/math?math=B_i(t)"> in (4) capable of building in an automatic fashion the constraint (0), the cost function (5) and their derivatives.
 # Requirements
 
 - numpy
