@@ -73,15 +73,16 @@ This library provides a template class to represent the basis <img src="https://
 
 ## Implemented basis
 Up to now we have implemented tree types of basis
-- Basis for the minimum jerk problems, called `cBasis0010`, because their optimize only the L2-norm of the jerk
+- Basis for the minimum jerk problems, called `cBasis0010`, because their optimize the L2-norm of the jerk
 <p align="center">
 <img src="https://render.githubusercontent.com/render/math?math=\Large I=\int_0^T  \left\|\frac{\mathsf{d}^3\mathbf{q}}{\mathsf{d} t^3 }\right\|^2">
 </p>
 
-- Basis for the weighed speed-jerk problems, called `cBasis1010`, because their optimize only the L2-norm of the jerk
+- Basis for the weighed speed-jerk problems, called `cBasis1010`, because their optimize convex combination of the L2-norm of the speed and the L2 norm of the jerk
 <p align="center">
-<img src="https://render.githubusercontent.com/render/math?math=\Large I=\int_0^T \alpha  \left\|\frac{\mathsf{d}^3\mathbf{q}}{\mathsf{d} t^3 }\right\|^2 %2B (\alpha-1)\left\|\frac{\mathsf{d}^3\mathbf{q}}{\mathsf{d} t^3 }\right\|^2">
+<img src="https://render.githubusercontent.com/render/math?math=\Large I=\int_0^T \alpha  \left\|\frac{\mathsf{d}\mathbf{q}}{\mathsf{d} t }\right\|^2 %2B (\alpha-1)\left\|\frac{\mathsf{d}^3\mathbf{q}}{\mathsf{d} t^3 }\right\|^2">
 </p>
+
 # Requirements
 
 - numpy
