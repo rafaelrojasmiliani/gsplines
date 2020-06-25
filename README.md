@@ -10,7 +10,6 @@ Such characterization may vary depending on how we formalize the problem, but th
 The important fact is that se can identify a generlized spline with a point in Rn and such a characterization allows to formulate optimization problems on a space of curves as optimization problems in real variables.
 
 # Background
- ```math
- SE = \frac{\sigma}{\sqrt{n}}
- ```
+
+This library is aimet to solve problems of waypoint trajectory planning such that the following integral is minized
 <img src="https://render.githubusercontent.com/render/math?math=\Large \int_0^T \left\|\frac{\mathsf{d}\mathbf{q}}{\mathsf{d} t }\right\|^2 %2B \left\|\frac{\mathsf{d}^2\mathbf{q}}{\mathsf{d} t^2 }\right\|^2 %2B \left\|\frac{\mathsf{d}^3\mathbf{q}}{\mathsf{d} t^3 }\right\|^2 %2B \left\|\frac{\mathsf{d}^4\mathbf{q}}{\mathsf{d} t^4 }\right\|^2 \mathsf{d} t">
