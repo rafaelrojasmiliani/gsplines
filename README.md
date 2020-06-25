@@ -23,7 +23,7 @@ It may be proven that such a problem can be subdivided in two steps
 The step 1. is done by solving a linear ordinary differential equation. One method to achieve 2. is to formulate an optimization problem (e.g. a gradient based one).
 
 ## Optimal curves
-We underline that this library leverages on the general theory of linear ODEs.
+We underline that this library leverages on the [general theory of linear ODEs](https://en.wikipedia.org/wiki/Linear_differential_equation).
 It may be proven that any optimal of (1) solves the following linear ODE, which turn out to be the Euler-Lagrange equations at each interval <img src="https://render.githubusercontent.com/render/math?math=[t_i, t_{i%2B1}]">
 <p align="center">
 <img src="https://render.githubusercontent.com/render/math?math=-\alpha_1\frac{\mathsf{d}^2\mathbf{q}}{\mathsf{d} t^2 } %2B \alpha_2 \frac{\mathsf{d}^4\mathbf{q}}{\mathsf{d} t^4 } - \alpha_3\frac{\mathsf{d}^6\mathbf{q}}{\mathsf{d} t^6 } %2B  \alpha_4 \frac{\mathsf{d}^8\mathbf{q}}{\mathsf{d} t^8 } = 0\ \ \ \ \ (2)">
@@ -33,7 +33,9 @@ with the following boundary conditions
 <img src="https://render.githubusercontent.com/render/math?math=\mathbf{q}(t_i) = \mathbf{w}_i\ \ \ \ \ \ \ \mathbf{q}(t_{i%2B1}) = \mathbf{w}_{i%2B1}\ \ \ \ \ \ \ \ \ \ \ \ \ \ (3)">
 </p>
 Because the ODE (2) is linear, we can compute its general suction depending on the value of the coefficients <img src="https://render.githubusercontent.com/render/math?math=\alpha_i">.
+
 In fact, the general solution of (2) may be written as
 <p align="center">
 <img src="https://render.githubusercontent.com/render/math?math=\mathbf{q} = \sum_{i=1}^{n_b} \mathbf{a}_i B_i(t) (4)">
 </p>
+where <img src="https://render.githubusercontent.com/render/math?math=n_b"> and <img src="https://render.githubusercontent.com/render/math?math=B_i(t)"> depend on the coefficients <img src="https://render.githubusercontent.com/render/math?math=\alpha_i">.
