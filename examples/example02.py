@@ -78,7 +78,7 @@ def plot_weighed_speed_jerk_spline():
     '''
     N = 5
     # Number of intervals is N=2
-    tauv = np.random.rand(N)  # Time interval between waypoints
+    tauv = np.random.rand(N)*2.0  # Time interval between waypoints
 
     dim = 3
     # Number of waypoints is N+1 = 3, dimenion of ambient space dim=3
