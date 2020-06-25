@@ -58,9 +58,18 @@ After substituting (4) in (1) we obtain the following expression
 <img src="https://render.githubusercontent.com/render/math?math=I=\mathbf{y}^\top \mathbf{Q}(\boldsymbol{\tau}) \mathbf{y}\ \ \ \ \ \ \ \ \ \ \ \ \ (5)">
 </p>
 
+Finally we can substitute (0) in (5) to obtain the representation of (1) subject to the waypoint constrains as a function of <img src="https://render.githubusercontent.com/render/math?math=N"> real variables:
+
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=I=I(\boldsymbol{\tau})=\mathbf{b}^{-\top}\mathbf{A}^{-\top}(\boldsymbol{\tau})\mathbf{Q}(\boldsymbol{\tau}) \mathbf{A}^{-1}(\boldsymbol{\tau})\mathbf{b}\ \ \ \ \ \ \ \ \ \ \ \ \ (5)">
+</p>
+
 # Software architecture
 
-From the formalization of the optimization problem, we derive that a flexible and uniform methodology for the construction of the optimization problem (1) may consists in designing an abstract representation of the basis <img src="https://render.githubusercontent.com/render/math?math=B_i(t)"> in (4) capable of building in an automatic fashion the constraint (0), the cost function (5) and their derivatives.
+From the formalization of the optimization problem, we derive that a flexible and uniform methodology for the construction of the problem of optimizing (1) consists in designing an abstract representation of the basis <img src="https://render.githubusercontent.com/render/math?math=B_i(t)"> in (4) capable of building in an automatic fashion the constraint (0), the cost function (5) and their derivatives.
+
+In fact, note that the input of any gradient-based optimizer are the expressions (5), (0) and their derivatives. 
+
 # Requirements
 
 - numpy
