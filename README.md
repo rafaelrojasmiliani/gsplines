@@ -39,3 +39,10 @@ In fact, the general solution of (2) may be written as
 <img src="https://render.githubusercontent.com/render/math?math=\mathbf{q} = \sum_{i=1}^{n_b} \mathbf{a}_i B_i(t) (4)">
 </p>
 where <img src="https://render.githubusercontent.com/render/math?math=n_b"> and <img src="https://render.githubusercontent.com/render/math?math=B_i(t)"> depend on the coefficients <img src="https://render.githubusercontent.com/render/math?math=\alpha_i">.
+
+
+# Requirements
+
+- numpy
+- scipy
+- matplotlib

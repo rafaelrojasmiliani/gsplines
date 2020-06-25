@@ -16,7 +16,7 @@ class cBasis0010(object):
         # rememver ds/dt = 2.0/tau
         v = self.evalOnWindow(_s, _tau)
         aux = 2.0 / _tau
-        return np.ravel(np.linalg.matrix_power(aux * self.Dmat_, _deg).dot(v))
+        return np.ravel(np.linalg.matrix_power(aux * self.Dmat_, _deg).dot(v)).copy()
 
     def evalOnWindow(self, _s, _tau):
         """Eval on window evaluate in [-1, 1] returns the cFundFuncBasis
@@ -28,7 +28,7 @@ class cBasis0010(object):
         for i in range(1, 5):
             self.buff_[i + 1] = 1.0 / (i + 1.0) * (
                 (2.0 * i + 1.0) * _s * self.buff_[i] - i * self.buff_[i - 1])
-        return self.buff_
+        return self.buff_.copy()
 
     def evalDerivWrtTauOnWindow(self, _s, _tau, _deg=1):
         """Eval on window evaluate in [-1, 1] returns the first derivate wrt

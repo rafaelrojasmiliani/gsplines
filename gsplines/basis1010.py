@@ -65,7 +65,7 @@ class cBasis1010(object):
         self.buff_[4] = p
         self.buff_[5] = 1.0
 
-        return self.buff_
+        return self.buff_.copy()
 
     def evalDerivWrtTauOnWindow(self, _s, _tau, _deg=1):
         """Eval on window evaluate in [-1, 1] returns the derivates wrt tau

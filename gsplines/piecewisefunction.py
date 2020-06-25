@@ -75,7 +75,7 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
 
         self.T_ = self.tis_[-1]
 
-        self.funcTab_ = []  # components of the curve
+        self.functions_table_ = []  # components of the curve
         self.Qbuff = np.zeros((self.bdim_, self.bdim_))
 
         bdim = self.bdim_
@@ -87,7 +87,7 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
                     _domain=[self.tis_[i], self.tis_[i + 1]],
                     _basis=self.basis_) for i in range(0, self.N_)
             ]
-            self.funcTab_.append(func_row)
+            self.functions_table_.append(func_row)
 
         self.wp_ = self(self.tis_)
 
@@ -104,15 +104,23 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
         ]
 
         return np.vstack([
-            np.piecewise(_t, cond_list, self.funcTab_[i])
+            np.piecewise(_t, cond_list, self.functions_table_[i])
             for i in range(0, self.dim_)
         ]).transpose()
 
-    def deriv(self, m=1):
+    def deriv(self, _m=1):
+        ''' Get the derivative of the curve.
+        This funciton returns another pice-wise function which is the _m-th
+        derivative of the current instance (self).
+        Paramenters:
+        ---------
+            _m: int
+                Degree f the derivative
+        '''
         result = cp.deepcopy(self)
-        for i, pol_row in enumerate(self.funcTab_):
+        for i, pol_row in enumerate(self.functions_table_):
             for j, p in enumerate(pol_row):
-                result.funcTab_[i][j] = p.deriv(m)
+                result.functions_table_[i][j] = p.deriv(_m)
 
         return result
 
@@ -153,6 +161,12 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
         return constraints.solve(_tauv=tauv, _alpha=self.alpha_)
 
     def l2_norm(self, _deg=0):
+        '''Compute the L2 noorm of the _deg-th derivative of the curve
+        Paramenters:
+        ------------
+            _deg: int
+                Degree of the derivative that we desire the L2 norm
+        '''
         bdim = self.bdim_
         basis = self.basis_
         tauv = self.tau_
@@ -227,7 +241,7 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
 
         self.T_ = self.tis_[-1]
 
-        self.funcTab_ = []  # components of the curve
+        self.functions_table_ = []  # components of the curve
         self.Qbuff = np.zeros((6, 6))
 
         self.wp_ = self(self.tis_)
