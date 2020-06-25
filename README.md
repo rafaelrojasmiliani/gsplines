@@ -14,9 +14,9 @@ Moreover, such a relation is synthesised in the expression of the type
 
 where <img src="https://render.githubusercontent.com/render/math?math=\mathbf{A}(\boldsymbol\tau)"> is a matrix which depends on the time intervals <img src="https://render.githubusercontent.com/render/math?math=\boldsymbol\tau">, <img src="https://render.githubusercontent.com/render/math?math=\mathbf{b}(\mathbf{w})"> is a column vector which depends on the waypoints <img src="https://render.githubusercontent.com/render/math?math=\mathbf{w}">, the speed, and possible higher order derivatives at the boundaries, and <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}"> is a column vector which represents uniquely the curve at each interval.
 
-The main challenge to build into a computer a trajectory optimization problems with waypoint constraint is to compute the derivatives of <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}"> with respect to <img src="https://render.githubusercontent.com/render/math?math=\mathbf{\tau}">. 
+The main challenge to build into a computer a trajectory optimization problems with waypoint constraints is to compute the derivatives of <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}"> with respect to <img src="https://render.githubusercontent.com/render/math?math=\mathbf{\tau}">. 
 
-This library is to provide a uniform and simple interface to compute splines using the representation (0). 
+This library provides a uniform and simple interface to formulate gradient-based optimization problems for waypoint-constrained trajectory planning. The library leverage on the representation (0) to compute the "derivatives of the splines" with respect to the time intervals (and possibly the waypoints) as the corresponding derivatives of <img src="https://render.githubusercontent.com/render/math?math=\mathbf{y}">
 
 
 # Background
