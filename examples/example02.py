@@ -2,7 +2,7 @@
 This library provide simple classes to build splines of any regular basis.
 In other words, given the following ingredients:
     1) basis
-    2) time inervals
+    2) time intervals
     3) waypoints
 the library can compute the piece-wise function which joints the required waypoints.
 '''
@@ -33,14 +33,14 @@ def plot_fifth_order_spline():
         1.2) Number of intervals (number of waypoints minus one)
         1.3) Basis of function to joint the waypoints
 
-    2) Call the getSpline method, specifing the time intervals (tauv) and the waypoints.
+    2) Call the getSpline method, specifying the time intervals (tauv) and the waypoints.
     '''
     N = 2
     # Number of intervals is N=2
     tauv = np.array([1.0, 2.0])  # Time interval between waypoints
 
     dim = 3
-    # Number of waypoints is N+1 = 3, dimenion of ambient space dim=3
+    # Number of waypoints is N+1 = 3, dimension of ambient space dim=3
     wp = np.array([  [0, 0, 0],  # waypoint 0
             [1, 1, 1],  # waypoint 1
             [2, -1, 0]]) # waypoint 2
@@ -74,14 +74,14 @@ def plot_weighed_speed_jerk_spline():
         1.2) Number of intervals (number of waypoints minus one)
         1.3) Basis of function to joint the waypoints
 
-    2) Call the getSpline method, specifing the time intervals (tauv) and the waypoints.
+    2) Call the getSpline method, specifying the time intervals (tauv) and the waypoints.
     '''
     N = 5
     # Number of intervals is N=2
     tauv = np.random.rand(N)*2.0  # Time interval between waypoints
 
     dim = 3
-    # Number of waypoints is N+1 = 3, dimenion of ambient space dim=3
+    # Number of waypoints is N+1 = 3, dimension of ambient space dim=3
     wp = np.random.rand(N+1, dim)
 
     alpha = 0.99
