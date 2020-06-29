@@ -2,7 +2,12 @@
     Classes and functions for construction of generalized splines from
     waypoints and time intervals.
 '''
-from time import process_time
+import sys
+if sys.version_info >= (3, 0):
+    from time import process_time
+else:
+    from time import time as process_time
+
 import numpy as np
 from scipy.sparse import csc_matrix
 from scipy.sparse.linalg import spsolve
