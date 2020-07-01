@@ -3,6 +3,7 @@
  This example only shows how to create a simple pinoccio model
  from a URDF file and then it compute the derivatives of the inverse kinematics w.r.t q, qd, and qdd
 """
+import matplotlib.pyplot as plt  # plot library
 from sys import argv
 from os.path import dirname, join, abspath
 import pinocchio
@@ -26,26 +27,26 @@ def main():
     q_data = [q.deriv(i)(time) for i in range(3)]
     torque = np.array([
         pinocchio.rnea(model, data, _q, _qd, _qdd)
-        for _q, _qd, _qdd in zip(q_data)
+        for _q, _qd, _qdd in zip(*q_data)
     ])
 
-    q_data = q_data + torque
+    q_data.append(torque)
 
-    for curve in q_data:
+    fig, ax = plt.subplots(4, 2)
+    for i, curve in enumerate(q_data):
         for j in range(curve.shape[1]):
             ax[i, j].plot(time, curve[:, j], 'b')
             ax[i, j].grid()
 
     # plt.subplots_adjust(left=0.025, bottom=0.05, right=0.975, top=0.95, wspace=0.25, hspace=0.15)
-    fig.suptitle(_title)
     plt.show()
 
 
-
 def create_pinocchio_model():
-    pinocchio_model_dir = join(dirname(str(abspath(__file__))), "example_pin_model/")
+    pinocchio_model_dir = join(
+        dirname(str(abspath(__file__))), "example_pin_model/")
 
-    urdf_filename = pinocchio_model_dir + 'model.urdf' 
+    urdf_filename = pinocchio_model_dir + 'model.urdf'
     # Load the urdf model
     model = pinocchio.buildModelFromUrdf(urdf_filename)
     print('model name: ' + model.name)

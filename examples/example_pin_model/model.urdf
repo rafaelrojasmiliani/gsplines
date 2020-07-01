@@ -25,10 +25,10 @@
 
     <link name="link1">
         <visual>
-                <origin rpy="0 0 0" xyz="0 0 0.0"/>
-                <geometry>
-                    <cylinder radius="0.35" length="0.4"/>
-                </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0.0"/>
+            <geometry>
+                <cylinder radius="0.35" length="0.4"/>
+            </geometry>
         </visual>
         <inertial>
           <mass value="3.42"/>
