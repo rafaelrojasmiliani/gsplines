@@ -4,14 +4,12 @@
 
     \int_{-1}^{1} (2/tau) \alpha dq/ds + (2/tau)^5 (1-\alpha) d^3 q / ds^3 dt
 """
-import numpy as np
-import sympy as sp
-from scipy.sparse import csc_matrix
 import unittest
+from scipy.sparse import csc_matrix
+import numpy as np
 from gsplines.gspline import cSplineCalc
 from gsplines.basis1010 import cBasis1010
 from gsplines.basis0010 import cBasis0010
-from gsplines.banded import diagonal_form
 
 
 class cMyTest(unittest.TestCase):

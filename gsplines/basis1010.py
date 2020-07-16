@@ -12,9 +12,8 @@ from .basis1010utils import compute_Qd3_dtau_block
 class cBasis1010(object):
     dim_ = 6
 
-    def __init__(self, _params=None):
+    def __init__(self, _params):
 
-        assert _params is not None
         self.Dmat_ = np.array(
             [[1, -1, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0], [0, 0, -1, -1, 0, 0],
              [0, 0, 1, -1, 0, 0], [0, 0, 0, 0, 0, 1], [0, 0, 0, 0, 0, 0]],
