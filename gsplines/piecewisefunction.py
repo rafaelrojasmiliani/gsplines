@@ -4,8 +4,6 @@ from .piece import cPiece
 import itertools
 import numpy as np
 
-import sympy as sp
-
 import copy as cp
 
 
@@ -93,10 +91,12 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
 
     def __call__(self, _t):
 
-        if hasattr(_t, '__len__'):
-            pass
-        else:
-            _t = float(_t)
+#        if hasattr(_t, '__len__'):
+#            pass
+#        else:
+#            _t = float(_t)
+#
+        _t = np.atleast_1d(_t)
 
         cond_list = [
             np.logical_and(tl <= _t, _t <= tr)

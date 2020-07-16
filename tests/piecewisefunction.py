@@ -4,7 +4,6 @@
     randomly made.
 """
 import numpy as np
-import sympy as sp
 import unittest
 from gsplines.piecewisefunction import cPiecewiseFunction
 from gsplines.basis1010 import cBasis1010
