@@ -6,7 +6,7 @@ import unittest
 from gsplines.basis0010 import cBasis0010
 from gsplines.basis1010 import cBasis1010
 from gsplines.gspline import cSplineCalc
-from gsplines.json import piecewise2json, json2piecewise
+from gsplines import piecewise2json, json2piecewise
     
 class cMyTest(unittest.TestCase):
     def __init__(self, *args, **kwargs):
