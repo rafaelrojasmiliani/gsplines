@@ -27,7 +27,7 @@ class cPiece(object):
         _t = np.atleast_1d(_t)
 
         _t[np.where(_t < self.domain_[0])] = self.domain_[0]
-        _t[np.where(_t > self.domain_[1])] = self.domain_[0]
+        _t[np.where(_t > self.domain_[1])] = self.domain_[1]
         _s = 2.0 * (_t - self.domain_[0]) / self.tau_ - 1.0
         result = np.array([
             self.basis_.evalOnWindow(si, self.tau_).dot(self.coeff_)

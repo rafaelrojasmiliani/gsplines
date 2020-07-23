@@ -1,3 +1,8 @@
 .*.swp
 .testtimes
 __pycache__
+*.pyc
+build/*
+dist/*
+gsplines.egg-info/*
+
