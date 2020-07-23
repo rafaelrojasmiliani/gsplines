@@ -43,33 +43,33 @@ class cMyTest(unittest.TestCase):
         splcalc.printPerformace()
         pass
 
-#    def testcontinuity(self):
-#        print('Test continuity constraints with plot')
-#        for i in range(3):
-#            dim = np.random.randint(2, 3)
-#            N = np.random.randint(3, 10)
-#            a = np.random.rand()
-#            wp = (np.random.rand(N + 1, dim) - 0.5) * 2 * np.pi
-#            tauv = 0.5 + np.random.rand(N) * 3.0
-#            tis = [np.sum(tauv[0:i]) for i in range(0, N + 1)]
-#            T = np.sum(tauv)
-#            splcalc = cSplineCalc(dim, N, cBasis1010(a))
-#            spln = splcalc.getSpline(tauv, wp)
-#            from matplotlib import pyplot as plt
-#
-#            t = np.arange(0, T, 0.005)
-#            q_list = [spln.deriv(i)(t) for i in range(0, 6)]
-#
-#            fig, axs = plt.subplots(6, dim)
-#
-#            for i in range(0, 6):
-#                for j in range(0, dim):
-#                    axs[i, j].plot(t, q_list[i][:, j])
-#                    axs[i, j].grid()
-#                    for ti in tis:
-#                        axs[i, j].axvline(x=ti, color='b', linestyle='--')
-#
-#            plt.show()
+    def testcontinuity(self):
+        print('Test continuity constraints with plot')
+        for i in range(3):
+            dim = np.random.randint(2, 3)
+            N = np.random.randint(3, 10)
+            a = np.random.rand()
+            wp = (np.random.rand(N + 1, dim) - 0.5) * 2 * np.pi
+            tauv = 0.5 + np.random.rand(N) * 3.0
+            tis = [np.sum(tauv[0:i]) for i in range(0, N + 1)]
+            T = np.sum(tauv)
+            splcalc = cSplineCalc(dim, N, cBasis1010(a))
+            spln = splcalc.getSpline(tauv, wp)
+            from matplotlib import pyplot as plt
+
+            t = np.arange(0, T, 0.005)
+            q_list = [spln.deriv(i)(t) for i in range(0, 6)]
+
+            fig, axs = plt.subplots(6, dim)
+
+            for i in range(0, 6):
+                for j in range(0, dim):
+                    axs[i, j].plot(t, q_list[i][:, j])
+                    axs[i, j].grid()
+                    for ti in tis:
+                        axs[i, j].axvline(x=ti, color='b', linestyle='--')
+
+            plt.show()
 
     def test_eval_b(self):
         import time

@@ -133,19 +133,25 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
                 result[i, j] = qij
 #                assert np.linalg.norm(result[i, j] - result2[i, j] ) < 1.0e-10
         return result
-    def deriv(self, _m=1):
+    def deriv(self, _deg=1):
         ''' Get the derivative of the curve.
         This funciton returns another pice-wise function which is the _m-th
         derivative of the current instance (self).
         Paramenters:
         ---------
-            _m: int
+            _deg: int
                 Degree f the derivative
         '''
         result = cp.deepcopy(self)
-        for i, pol_row in enumerate(self.functions_table_):
-            for j, p in enumerate(pol_row):
-                result.functions_table_[i][j] = p.deriv(_m)
+        bdim = result.basis_.dim_
+        dim = result.dim_
+        for Ni, tau in enumerate(result.tau_):
+            D = result.basis_.derivMatrixOnWindow(tau, _deg)
+            DT = D.T
+            for j in range(dim):
+                y = result.y_[j * bdim + Ni * bdim * dim:
+                            j * bdim + Ni * bdim * dim + bdim]
+                y[:] = DT.dot(y)
 
         return result
 
