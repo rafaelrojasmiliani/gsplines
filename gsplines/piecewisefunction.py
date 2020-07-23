@@ -1,4 +1,3 @@
-
 from .piece import cPiece
 
 import itertools
@@ -37,7 +36,7 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
     """
 
     def __init__(self, _tauv, _y, _dim, _basis):
-        """ 
+        """
         Constructor. Creates a piecewise map given the
         canonical representation given in _x and the
         funcition to evaluate
@@ -72,6 +71,7 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
         self.tis_ = [np.sum(self.tau_[0:i]) for i in range(0, N + 1)]
 
         self.T_ = self.tis_[-1]
+        self.domain_ = [0.0, self.T_]
 
         self.functions_table_ = []  # components of the curve
         self.Qbuff = np.zeros((self.bdim_, self.bdim_))
@@ -91,23 +91,48 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
 
     def __call__(self, _t):
 
-#        if hasattr(_t, '__len__'):
-#            pass
-#        else:
-#            _t = float(_t)
-#
+        #        if hasattr(_t, '__len__'):
+        #            pass
+        #        else:
+        #            _t = float(_t)
+        #
         _t = np.atleast_1d(_t)
+        assert _t.ndim == 1
+        _t[_t < self.domain_[0]] = self.domain_[0]
+        _t[_t > self.domain_[1]] = self.domain_[1]
 
-        cond_list = [
-            np.logical_and(tl <= _t, _t <= tr)
-            for tl, tr in pairwise(self.tis_)
-        ]
+        intervals = np.zeros(_t.shape, dtype=np.int)
+        result = np.zeros((_t.shape[0], self.dim_))
+        for i, ti in enumerate(_t):
+            for Ni, (tl, tr) in enumerate(pairwise(self.tis_)):
+                if tl <= ti and ti <= tr:
+                    intervals[i] = Ni
+                    break
 
-        return np.vstack([
-            np.piecewise(_t, cond_list, self.functions_table_[i])
-            for i in range(0, self.dim_)
-        ]).transpose()
 
+
+#        cond_list = [
+#            np.logical_and(tl <= _t, _t <= tr)
+#            for tl, tr in pairwise(self.tis_)
+#        ]
+#
+#        result2 = np.vstack([
+#            np.piecewise(_t, cond_list, self.functions_table_[i])
+#            for i in range(0, self.dim_)
+#        ]).transpose()
+
+        bdim = self.basis_.dim_
+        dim = self.dim_
+        for i, Ni in enumerate(intervals):
+            s = 2.0 * (_t[i] - self.tis_[Ni]) / self.tau_[Ni] - 1.0
+            Bi = self.basis_.evalOnWindow(s, self.tau_[Ni])
+            for j in range(dim):
+                y = self.y_[j * bdim + Ni * bdim * dim:
+                            j * bdim + Ni * bdim * dim + bdim]
+                qij = Bi.dot(y)
+                result[i, j] = qij
+#                assert np.linalg.norm(result[i, j] - result2[i, j] ) < 1.0e-10
+        return result
     def deriv(self, _m=1):
         ''' Get the derivative of the curve.
         This funciton returns another pice-wise function which is the _m-th
@@ -171,7 +196,7 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
         basis = self.basis_
         tauv = self.tau_
         y = self.y_
-        Q = np.zeros((bdim, bdim)) 
+        Q = np.zeros((bdim, bdim))
         res = 0.0
         for iinter in range(0, self.N_):
             i0 = iinter * bdim * self.dim_
@@ -181,7 +206,6 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
                 yi = y[j0:j0 + bdim]
                 res += Q.dot(yi).dot(yi)
         return res
-
 
 
 class cPiecewiseFunction_2(object):
@@ -292,7 +316,7 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
         for i, ti in enumerate(_t):
             s, tau, iinter = self.__domain2window(ti)
             for j in range(dim):
-                j0 = iinter*6*dim+6*j
+                j0 = iinter * 6 * dim + 6 * j
                 j1 = j0 + 6
                 y = self.y_[j0:j1]
                 B = self.basis_(s)
@@ -304,7 +328,7 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
         for iinter, taui in enumerate(self.tau_):
             D = self.basis_.derivMatrixOnWindow(taui, deg).T
             for j in range(dim):
-                j0 = iinter*6*dim+6*j
+                j0 = iinter * 6 * dim + 6 * j
                 j1 = j0 + 6
                 y[j0:j1] = D.dot(self.y_[j0:j1])
         return cPiecewiseFunction_2(self.tau_, y, dim, self.basis_)

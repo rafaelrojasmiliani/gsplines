@@ -11,6 +11,32 @@ from gsplines.basis0010 import cBasis0010
 from gsplines.basis1000 import cBasis1000
 
 
+import os
+import unittest
+import functools
+import traceback
+import sys
+import pdb
+
+def debug_on(*exceptions):
+    ''' Decorator for entering in debug mode after exceptions '''
+    if not exceptions:
+        exceptions = (Exception, )
+
+    def decorator(f):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            try:
+                return f(*args, **kwargs)
+            except exceptions:
+                info = sys.exc_info()
+                traceback.print_exception(*info)
+                pdb.post_mortem(info[2])
+                sys.exit(1)
+
+        return wrapper
+
+    return decorator
 
 
 class cMyTest(unittest.TestCase):
@@ -21,8 +47,9 @@ class cMyTest(unittest.TestCase):
         self.N_ = np.random.randint(3, 10)
         self.dim_ = np.random.randint(3, 10)
 
+    @debug_on()
     def test(self):
-        '''
+        ''' Test that there are not exceptions
         '''
 
         for i in range(10):
@@ -41,6 +68,7 @@ class cMyTest(unittest.TestCase):
 
             assert res.shape[1] == dim and res.shape[0] == t.shape[0]
 
+    @debug_on()
     def test_l2_norms(self):
         ''' Test L2 norm'''
         B = cBasis1000()
@@ -66,6 +94,27 @@ class cMyTest(unittest.TestCase):
         Nominal integral = {:.4f}
         Test integral = {:.4f}
         '''.format(err, Inom, Itest)
+
+    @debug_on()
+    def testplot(self):
+        from gsplines.gspline import cSplineCalc
+        dim = np.random.randint(6, 8)
+        N = np.random.randint(2, 20)
+        tauv = 0.5 + np.random.rand(N) * 3.0
+        T = np.sum(tauv)
+        wp = (np.random.rand(N + 1, dim) - 0.5) * 2 * np.pi
+        splcalc = cSplineCalc(dim, N, cBasis0010())
+        q = splcalc.getSpline(tauv, wp)
+        try:
+            import matplotlib.pyplot as plt
+            t = np.arange(0, T, 0.01)
+
+            plt.plot(t, q(t)[:, 0])
+            plt.show()
+        except:
+            pass
+
+
 
 def main():
     unittest.main()
