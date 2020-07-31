@@ -10,6 +10,14 @@ from constraints.constraints import cAffineBilateralConstraint
 
 
 class cCostNonLinear(metaclass=abc.ABCMeta):
+    ''' This is a class which represents a non linear function
+    of  a spline. In other words this represents a map
+        F : gpline --> R
+        This class represents a relation between a gspline and a real number.
+        As the gspline is defined by its base, waypoints and time intervals
+        this is a base for functions which takes waypoiints and time intervals
+        and return a real number.
+        '''
     def __init__(self, _wp, _T, _Ni, _Ngl):
 
         #  Main instance data
