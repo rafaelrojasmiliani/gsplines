@@ -92,7 +92,7 @@ class cL2Norm(cFixedWaypointsFunctional):
                 j1 = j0 + bdim
                 yi = y[j0:j1]
                 zi = z[j0:j1]
-                res += self.Q_.dot(z).dot(y)*scal_multiplier
+                res += self.Q_.dot(zi).dot(yi)*scal_multiplier
 
         return res
 
@@ -127,3 +127,8 @@ class cL2Norm(cFixedWaypointsFunctional):
                 self.eval_yTdQdiz(tauv, i, y, y)
 
         return _res
+
+
+class cJerkL2Norm(cL2Norm):
+    def __init__(self, _wp, _basis):
+        cL2Norm.__init__(self, _wp, _basis, 3)

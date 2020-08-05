@@ -1,8 +1,8 @@
-from .piecewisefunction import cPiecewiseFunction
+from ..piecewisefunction.piecewisefunction import cPiecewiseFunction
 import json
 import numpy as np
 
-import gsplines
+import gsplines.basis
 
 
 def piecewise2json(_pw):
@@ -23,7 +23,7 @@ def json2piecewise(_data):
     for i, element in enumerate(array[:-2]):
         array[i] = np.array(element)
     basis_data = array[-1]
-    class_ = getattr(gsplines, basis_data[0])
+    class_ = getattr(gsplines.basis, basis_data[0])
     
     if basis_data[1] is not None:
         basis = class_(basis_data[1])

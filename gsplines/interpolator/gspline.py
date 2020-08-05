@@ -411,7 +411,7 @@ class cSplineCalc(object):
     def eval_y(self, _tauv, _wp):
         return self.solveLinSys(_tauv, _wp)
 
-    def getSpline(self, _tauv, _wp):
+    def get_gspline(self, _tauv, _wp):
         assert _tauv.shape[0] == self.N_ and len(_tauv.shape) == 1
         assert _wp.shape[0] == self.N_ + 1 and _wp.shape[1] == self.dim_
         y = self.solveLinSys(_tauv, _wp)
@@ -420,6 +420,9 @@ class cSplineCalc(object):
         res = cPiecewiseFunction(_tauv, y, self.dim_, self.basis_)
         res.wp_ = _wp.copy()
         return res
+
+    def __call__(self, _tauv, _wp):
+        return self.get_gspline(_tauv, _wp)
 
     def eval_dydtau(self, _tauv, _wp, _y=None):
         ''' Computs the derivatives of the vector y w.r.t. tau.  This retuns
