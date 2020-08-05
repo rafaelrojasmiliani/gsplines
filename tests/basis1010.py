@@ -7,7 +7,7 @@
 import unittest
 import numpy as np
 import sympy as sp
-from gsplines.basis1010 import cBasis1010
+from gsplines.basis.basis1010 import cBasis1010
 
 
 class cMyTest(unittest.TestCase):

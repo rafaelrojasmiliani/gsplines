@@ -3,9 +3,9 @@
 import numpy as np
 import sympy as sp
 import unittest
-from gsplines.gspline import cSplineCalc
-from gsplines.distfunction import cDistFunction, cDistSpeed
-from gsplines.basis1010 import cBasis1010
+from gsplines.interpolator.gspline import cSplineCalc
+from gsplines.functionals.distfunction import cDistFunction, cDistSpeed
+from gsplines.basis.basis1010 import cBasis1010
 
 import functools
 import traceback

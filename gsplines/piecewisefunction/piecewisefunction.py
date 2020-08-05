@@ -1,5 +1,3 @@
-from .piece import cPiece
-
 import itertools
 import numpy as np
 
@@ -73,19 +71,7 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
         self.T_ = self.tis_[-1]
         self.domain_ = [0.0, self.T_]
 
-        self.functions_table_ = []  # components of the curve
         self.Qbuff = np.zeros((self.bdim_, self.bdim_))
-
-        bdim = self.bdim_
-        for idim in range(0, self.dim_):
-            func_row = [
-                cPiece(
-                    self.y_[idim * bdim + i * bdim * self.dim_:
-                            idim * bdim + i * bdim * self.dim_ + bdim],
-                    _domain=[self.tis_[i], self.tis_[i + 1]],
-                    _basis=self.basis_) for i in range(0, self.N_)
-            ]
-            self.functions_table_.append(func_row)
 
         self.wp_ = self(self.tis_)
 
@@ -109,17 +95,6 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
                     intervals[i] = Ni
                     break
 
-
-
-#        cond_list = [
-#            np.logical_and(tl <= _t, _t <= tr)
-#            for tl, tr in pairwise(self.tis_)
-#        ]
-#
-#        result2 = np.vstack([
-#            np.piecewise(_t, cond_list, self.functions_table_[i])
-#            for i in range(0, self.dim_)
-#        ]).transpose()
 
         bdim = self.basis_.dim_
         dim = self.dim_
@@ -271,7 +246,6 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
 
         self.T_ = self.tis_[-1]
 
-        self.functions_table_ = []  # components of the curve
         self.Qbuff = np.zeros((6, 6))
 
         self.wp_ = self(self.tis_)

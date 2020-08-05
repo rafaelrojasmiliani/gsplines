@@ -416,7 +416,7 @@ class cSplineCalc(object):
         assert _wp.shape[0] == self.N_ + 1 and _wp.shape[1] == self.dim_
         y = self.solveLinSys(_tauv, _wp)
 
-        from .piecewisefunction import cPiecewiseFunction
+        from ..piecewisefunction.piecewisefunction import cPiecewiseFunction
         res = cPiecewiseFunction(_tauv, y, self.dim_, self.basis_)
         res.wp_ = _wp.copy()
         return res

@@ -4,7 +4,7 @@ Test basis, which represents the basis of the Legendre Polynomials
 import numpy as np
 import sympy as sp
 import unittest
-from gsplines.basis1000 import cBasis1000
+from gsplines.basis.basis1000 import cBasis1000
     
 class cMyTest(unittest.TestCase):
     def __init__(self, *args, **kwargs):

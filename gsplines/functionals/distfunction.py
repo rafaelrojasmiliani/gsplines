@@ -4,8 +4,8 @@
 '''
 import copy as cp
 import numpy as np
-from gsplines.gspline import cSplineCalc
-from gsplines.basis0010 import cBasis0010
+from ..interpolator.gspline import cSplineCalc
+from ..basis.basis0010 import cBasis0010
 
 
 class cDistFunction(object):
