@@ -22,23 +22,23 @@ class cCostNonLinear(metaclass=abc.ABCMeta):
 
         #  Main instance data
         self.dim_ = _wp.shape[1]
-        self.N0_ = _wp.shape[0] - 1
+        self.N_ = _wp.shape[0] - 1
         self.wp0_ = _wp.copy()
         self.T_ = _T
         self.Ni_ = _Ni
-        self.N_ = (_wp.shape[0] - 1) + _Ni * (_wp.shape[0] - 1) 
-        assert self.N_ == self.N0_*(_Ni+1), '''
+        self.n_points_ = (_wp.shape[0] - 1) + _Ni * (_wp.shape[0] - 1) 
+        assert self.n_points_ == self.N_*(_Ni+1), '''
         N nom =  {:d}
         N test = {:d}
         N0     = {:d}
         Ni     = {:d}
-        '''.format(self.N_, self.N0_*(_Ni+1), self.N0_, _Ni)
-        self.number_virtual_points_ = self.N_ + 1 - _wp.shape[0]
+        '''.format(self.n_points_, self.N_*(_Ni+1), self.N_, _Ni)
+        self.number_virtual_points_ = self.n_points_ + 1 - _wp.shape[0]
         self.ushape_ = self.number_virtual_points_ * self.dim_
 
         # Spline related data
         self.basis_ = cBasis0010()
-        self.splcalc_ = cSplineCalc(self.dim_, self.N_, self.basis_)
+        self.splcalc_ = cSplineCalc(self.dim_, self.n_points_, self.basis_)
         self.y_ = None
         self.A_ = None
         lss = self.splcalc_.linsys_shape_
@@ -46,7 +46,7 @@ class cCostNonLinear(metaclass=abc.ABCMeta):
 
         # Construction of waypoint array with fixed and "mobile" waypoints
         self.Fixedwp_ = _wp
-        self.wp_ = np.zeros((self.N_ + 1, self.dim_))
+        self.wp_ = np.zeros((self.n_points_ + 1, self.dim_))
         wp = self.wp0_
         self.uToWp_ = []
         for i, (v0, v1) in enumerate(zip(wp[:-1, :], wp[1:, :])):
@@ -59,7 +59,7 @@ class cCostNonLinear(metaclass=abc.ABCMeta):
 
         self.ushape_ = len(self.uToWp_)
 
-        self.gradient_sum_buff = np.zeros((self.ushape_ + self.N_, ))
+        self.gradient_sum_buff = np.zeros((self.ushape_ + self.n_points_, ))
 
         # Integration scheme
         self.int_scheme_ = quadpy.line_segment.gauss_legendre(_Ngl)
@@ -85,7 +85,7 @@ class cCostNonLinear(metaclass=abc.ABCMeta):
         if _t <= 0.0:
             return -1.0, _tauv[0], 0
 
-        tis = [np.sum(_tauv[0:i]) for i in range(0, self.N_ + 1)]
+        tis = [np.sum(_tauv[0:i]) for i in range(0, self.n_points_ + 1)]
 
         for iint, (t0, tf) in enumerate(zip(tis[:-1], tis[1:])):
             if t0 <= _t and _t < tf:
@@ -139,7 +139,7 @@ class cCostNonLinear(metaclass=abc.ABCMeta):
         #        ds = np.linalg.norm(wp[:-1, :] - wp[1:, :], axis=1)
         u0 = np.zeros((self.ushape_, ))
         u0 = self.wp2u(u0)
-        ds = np.ones((self.N_, ))
+        ds = np.ones((self.n_points_, ))
         ds = ds / np.sum(ds) * self.T_
 
         res = np.hstack([ds, u0])
@@ -161,7 +161,7 @@ class cCostNonLinear(metaclass=abc.ABCMeta):
 
     def u2wp(self, _u):
         i0 = 0
-        for i in range(0, self.N0_):
+        for i in range(0, self.N_):
             for j in range(1, self.Ni_ + 1):
                 self.wp_[(self.Ni_ + 1) * i + j, :] = _u[i0:i0 + self.dim_]
                 i0 += self.dim_
@@ -169,7 +169,7 @@ class cCostNonLinear(metaclass=abc.ABCMeta):
 
     def wp2u(self, _u):
         i0 = 0
-        for i in range(0, self.N0_):
+        for i in range(0, self.N_):
             for j in range(1, self.Ni_ + 1):
                 _u[i0:i0 + self.dim_] = self.wp_[(self.Ni_ + 1) * i + j, :]
                 i0 += self.dim_
@@ -179,7 +179,7 @@ class cCostNonLinear(metaclass=abc.ABCMeta):
             dim         = {:d}
             N0          = {:d}
             Ni          = {:d}
-            '''.format(i0, _u.shape[0], self.dim_, self.N0_, self.Ni_)
+            '''.format(i0, _u.shape[0], self.dim_, self.N_, self.Ni_)
         return _u
 
     def timeToCollocation(self, _t, _tauv):
@@ -202,8 +202,8 @@ class cCostNonLinear(metaclass=abc.ABCMeta):
 
     def __call__(self, _x):
 
-        _tauv = _x[:self.N_]
-        _u = _x[self.N_:]
+        _tauv = _x[:self.n_points_]
+        _u = _x[self.n_points_:]
 
         result = 0.0
         t0 = 0.0
@@ -218,8 +218,8 @@ class cCostNonLinear(metaclass=abc.ABCMeta):
         return result
 
     def gradient(self, _x, grad_buff=None):
-        _tauv = _x[:self.N_]
-        _u = _x[self.N_:]
+        _tauv = _x[:self.n_points_]
+        _u = _x[self.n_points_:]
         y = self.waypointConstraints(_tauv, _u)
         dydtau, _ = self.splcalc_.eval_dydtau(_tauv, self.wp_, y)
         dydu, _ = self.splcalc_.eval_dydu(_tauv, self.wp_, self.uToWp_,

@@ -7,9 +7,9 @@
 import unittest
 from scipy.sparse import csc_matrix
 import numpy as np
-from gsplines.gspline import cSplineCalc
-from gsplines.basis1010 import cBasis1010
-from gsplines.basis0010 import cBasis0010
+from gsplines.interpolator.gspline import cSplineCalc
+from gsplines.basis.basis1010 import cBasis1010
+from gsplines.basis.basis0010 import cBasis0010
 
 
 class cMyTest(unittest.TestCase):

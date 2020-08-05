@@ -114,6 +114,28 @@ class cMyTest(unittest.TestCase):
         except:
             pass
 
+    @debug_on()
+    def test_time(self):
+        ''' Test the evaluation time
+        '''
+
+        dim = np.random.randint(6, 8)
+        N = np.random.randint(2, 20)
+        tauv = 0.5 + np.random.rand(N) * 3.0
+        wp = (np.random.rand(N + 1, dim) - 0.5) * 2 * np.pi
+        splcalc = cSplineCalc(dim, N, cBasis0010())
+        q = splcalc.getSpline(tauv, wp)
+        dt = 0
+        Ntest = 1000
+        for _ in range(Ntest):
+            t = tauv[0]
+            t0 = time.time()
+            q0 = q(t)[0]
+            t1 = time.time()
+            dt += t1 - t0
+
+        print('mean evaluation time ', dt/Ntest)
+
 
 
 def main():
