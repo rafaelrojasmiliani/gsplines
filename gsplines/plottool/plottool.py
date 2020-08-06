@@ -18,5 +18,4 @@ def show_piecewisefunction(_q, _up_to_deriv=3, _dt=0.1):
             if i == 0:
                 ax[i, j].set_title('coordinate {:d}'.format(j+1), fontsize=8)
 
-    plt.subplots_adjust(left=0.025, bottom=0.05, right=0.975, top=0.95, wspace=0.25, hspace=0.15)
     plt.show()
