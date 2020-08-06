@@ -18,7 +18,9 @@ def rand_interpolate(_N, _dim, _basis, _T=10.0, _bounding_box=1.0):
     N = _N
     dim = _dim
     wp = (2 * np.random.rand(N + 1, dim) - 1) * _bounding_box
+
     tauv = np.random.rand(_N)
+    tauv = tauv/np.sum(tauv)*_T
     gsplcalc = cSplineCalc(dim, N, _basis)
 
     result = gsplcalc(tauv, wp)
