@@ -13,8 +13,6 @@ def show_piecewisefunction(_q, _up_to_deriv=3, _dt=0.1):
         for j in range(0, dim):
             ax[i, j].plot(t, qt[:, j])
             ax[i, j].grid()
-            ax[i, j].set_xticklabels(ax[i, j].get_xticks(), fontsize=5)
-            ax[i, j].set_yticklabels(ax[i, j].get_yticks(), fontsize=5)
             if i == 0:
                 ax[i, j].set_title('coordinate {:d}'.format(j+1), fontsize=8)
 
