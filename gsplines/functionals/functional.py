@@ -92,6 +92,8 @@ class cFixedWaypointsFunctional(cFunctional):
 
         self.b_ = self.splcalc_.eval_b(_wp)
 
+        self.wp_ = _wp.copy()
+
     def waypoint_constraints(self, _tauv):
         '''Solves the waypoint constraints  
                 y=A(_tau) b
