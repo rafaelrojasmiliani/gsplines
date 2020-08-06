@@ -70,6 +70,8 @@ class cFunctional(metaclass=abc.ABCMeta):
         return y
 
 
+
+
     @abc.abstractmethod
     def __call__(self, _x):
         pass
@@ -88,6 +90,8 @@ class cFixedWaypointsFunctional(cFunctional):
         N = _wp.shape[0] - 1
         dim = _wp.shape[1]
 
+
+
         cFunctional.__init__(self, N, dim, _basis)
 
         self.b_ = self.splcalc_.eval_b(_wp)
@@ -104,3 +108,5 @@ class cFixedWaypointsFunctional(cFunctional):
         y = spsolve(A, self.b_)
         return y
 
+    def get_first_guess(self):
+        return np.ones((self.N_, ))
