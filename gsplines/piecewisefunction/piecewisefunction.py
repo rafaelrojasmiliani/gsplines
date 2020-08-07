@@ -3,6 +3,7 @@ import numpy as np
 
 import copy as cp
 
+from ..interpolator import interpolate
 
 def pairwise(iterable):
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
@@ -190,6 +191,6 @@ component n     |  BF n1    |   BFn2   |  BFn3   |
 
         tauv = tauv/np.sum(tauv)*_new_exec_time
 
-        result = cPiecewiseFunction(tauv, self.y_, self.dim_, self.basis_)
+        result = interpolate(tauv, self.wp_, self.basis_)
 
         return result
