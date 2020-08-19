@@ -11,8 +11,10 @@ import abc
 
 class cL2Norm(cFixedWaypointsFunctional):
     """
-      This class implements the calculus of the L2 norm of the jerk for a
-      gspline.  
+      This class implements the functions required for the optimization of the
+      L2 norm of some derivative in a gradient-based optimizers.  It implments
+      the evaluation of the L2 norm given a sequence of waypooints and time
+      intervals and its gradient w.r.t. the time intervals.
     """
 
     def __init__(self, _wp, _basis, _deg):
@@ -41,8 +43,9 @@ class cL2Norm(cFixedWaypointsFunctional):
 
     def eval_yTdQdiz(self, tau, idx, y, z):
         """
-          Evaluate the quadratic form y^T dQdti z, where dQdti is the
-          derivative of the Q matrix of the cost function with respect to t_i
+          Evaluate the quadratic form y^T dQdti z, where dQdti
+          is the derivative of the Q matrix of the cost
+          function with respect to t_i
 
           Parameters:
           ----------
@@ -132,3 +135,61 @@ class cL2Norm(cFixedWaypointsFunctional):
 class cJerkL2Norm(cL2Norm):
     def __init__(self, _wp, _basis):
         cL2Norm.__init__(self, _wp, _basis, 3)
+
+class cConvexCombinationL2Norm(object):
+    """
+      This class implements the functions required for the optimization of the
+      linear combination of the L2 norm of two derivatives in a gradient-based optimizers.  It implments
+      the evaluation of the L2 norm given a sequence of waypooints and time
+      intervals and its gradient w.r.t. the time intervals.
+    """
+
+    def __init__(self, _wp, _basis, _deg1, _deg2, _alpha):
+        """
+          Initialize an instance of this class given a set of via points.
+          Such set must contain at least 3 points in R^n. The dimension of
+          the space where the curve q(t) lies as well as the number of
+          intervals is
+          computed using the input.
+
+          Parameters:
+          ----------
+            _wp: numpy array
+                A matrix which rows are the waypoint
+        """
+        func1 = cL2Norm(_wp, _basis, _deg1)
+        func2 = cL2Norm(_wp, _basis, _deg2)
+
+
+    def first_guess(self):
+
+        ds = np.ones((self.N_, ))
+        ds = ds/np.sum(ds)
+
+        return ds
+
+
+    def __call__(self, _x):
+        """
+          Evaluate the total jerk for a set of intervals _tauv.
+
+          Parameters:
+          ----------
+            _tauv: np.array float
+              vector containing the time intervals.
+          Returns:
+          -------
+            scalar:
+              L2 norm of the Jerk
+        """
+        alpha = self.alpha_
+        return alpha*self.func1(x)+(1-alpha)*self.func2(x)
+
+    def gradient(self, _x, _res):
+        self.func1.gradient(_x, _res)
+        grad1 = _res.copy()
+        self.func1.gradient(_x, _res)
+        grad2 = _res
+        alpha = self.alpha_
+        _res[:] = alpha*grad1 + (1-alpha)*grad2
+
