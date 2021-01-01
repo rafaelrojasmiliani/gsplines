@@ -33,7 +33,7 @@ class cBasisLagrange(object):
 
     def derivMatrixOnWindow(self, _tau, _deg):
         res = np.linalg.matrix_power(2.0/_tau * self.Dmat_, _deg)
-        return np.ravel(res)
+        return res
 
     def evalDerivOnWindow(self, _s, _tau, _deg):
         assert np.isscalar(_s)
