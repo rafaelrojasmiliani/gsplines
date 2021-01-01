@@ -3,8 +3,12 @@
 
 class cBasis(object):
     ''' class define a basis'''
-    def __init__(self):
 
+    def __init__(self):
+        pass
+
+    def evalOnWindow(self, _s, _tau):
+        pass
 
     def evalDerivOnWindow(self, _s, _tau, _deg):
         assert np.isscalar(_s)
@@ -12,18 +16,6 @@ class cBasis(object):
         v = self.evalOnWindow(_s, _tau)
         aux = 2.0 / _tau
         return np.ravel(np.linalg.matrix_power(aux * self.Dmat_, _deg).dot(v)).copy()
-
-    def evalOnWindow(self, _s, _tau):
-        """Eval on window evaluate in [-1, 1] returns the cFundFuncBasis
-        instance which contains the time derivate of the current instance.
-        """
-        assert np.isscalar(_s)
-        self.buff_[0] = 1.0
-        self.buff_[1] = _s
-        for i in range(1, 5):
-            self.buff_[i + 1] = 1.0 / (i + 1.0) * (
-                (2.0 * i + 1.0) * _s * self.buff_[i] - i * self.buff_[i - 1])
-        return self.buff_.copy()
 
     def evalDerivWrtTauOnWindow(self, _s, _tau, _deg=1):
         """Eval on window evaluate in [-1, 1] returns the first derivate wrt
@@ -47,11 +39,11 @@ class cBasis(object):
         if _deg == 0:
             raise ValueError()
         elif _deg == 1:
-            _Q[:, :] = np.array([[0, 0, 0, 0, 0, 0], 
+            _Q[:, :] = np.array([[0, 0, 0, 0, 0, 0],
                                  [0, 2, 0, 2, 0, 2],
-                                 [0, 0, 6, 0, 6, 0], 
+                                 [0, 0, 6, 0, 6, 0],
                                  [0, 2, 0, 12, 0, 12],
-                                 [0, 0, 6, 0, 20, 0], 
+                                 [0, 0, 6, 0, 20, 0],
                                  [0, 2, 0, 12, 0, 30]], dtype=np.float)
 
             _Q *= 2.0/_tau
@@ -67,6 +59,7 @@ class cBasis(object):
             _Q *= np.power(2.0 / _tau, 5.0)
         else:
             raise ValueError()
+
 
 def getDmatLeg(n):
     ''' Compute the derivative matrix for
@@ -106,9 +99,12 @@ class cBasis0010canonic(object):
         from numpy import sqrt
         Dm = np.array([[0.0,           0.0,      0.0,         0.0,  0.0, 0.0],
                        [sqrt(3.0),     0.0,      0.0,         0.0,  0.0, 0.0],
-                       [0.0,           sqrt(15.0), 0.0,         0.0,  0.0, 0.0],
-                       [1.0/6.0,       0.0,      sqrt(5.0)/15.0, 0.0, 0.0, 0.0],
-                       [0.0,           0.0,      0.0,         sqrt(3.0), 0.0, 0.0],
+                       [0.0,           sqrt(15.0), 0.0,
+                        0.0,  0.0, 0.0],
+                       [1.0/6.0,       0.0,
+                           sqrt(5.0)/15.0, 0.0, 0.0, 0.0],
+                       [0.0,           0.0,      0.0,
+                           sqrt(3.0), 0.0, 0.0],
                        [-sqrt(5.0)/12.0, 0.0,      -1.0/6.0,    0.0, sqrt(15.0), 0.0]])
 
         self.Dmat_ = Dm
