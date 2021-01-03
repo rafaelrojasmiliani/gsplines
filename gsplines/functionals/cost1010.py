@@ -38,12 +38,10 @@ class cCost1010(cFixedWaypointsFunctional):
         self.Q2buff = np.zeros((6, 6))
         self.Q3buff = np.zeros((6, 6))
 
-
         self.P_ = np.eye(self.N_) - (1.0 / self.N_) * \
             np.ones((self.N_, self.N_))
 
         self.b_ = self.splcalc_.eval_b(self.wp_)
-
 
     def __call__(self, _tauv):
         """
@@ -129,3 +127,17 @@ class cCost1010(cFixedWaypointsFunctional):
             # print(iinter, _result[iinter])
 
         return _result
+
+
+def approximate_optimal(_wp, _k):
+    from .cost1000 import optimal_taus
+    from ..interpolate import interpolate
+    assert _wp.ndim == 2
+    ni = _wp.shape[0] - 1
+    execution_time = 4 * ni / np.sqrt(2)
+    aux = 4*ni*_k / np.sqrt(2)
+    alpha = 1.0 / (1.0 + np.power(execution_time/aux, 4))
+    basis = cBasis1010(alpha)
+    tauv = optimal_taus(_wp) * execution_time
+    result = interpolate(tauv, _wp, basis)
+    return result
