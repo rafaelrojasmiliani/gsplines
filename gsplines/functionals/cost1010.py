@@ -131,7 +131,7 @@ class cCost1010(cFixedWaypointsFunctional):
 
 def approximate_optimal(_wp, _k):
     from .cost1000 import optimal_taus
-    from ..interpolate import interpolate
+    from ..interpolator import interpolate
     assert _wp.ndim == 2
     ni = _wp.shape[0] - 1
     execution_time = 4 * ni / np.sqrt(2)
