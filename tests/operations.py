@@ -41,7 +41,7 @@ class cMyTest(unittest.TestCase):
 
         time_span = np.arange(0, self.exec_time_, 0.05)
 
-        for _ in range(1):
+        for _ in range(10):
             f2 = choice(self.functions_)
 
             f3 = FunctionSum(res, f2)
@@ -52,7 +52,7 @@ class cMyTest(unittest.TestCase):
 
                 nom_val = res.deriv(deg)(time_span) + f2.deriv(deg)(time_span)
 
-                test_val = f3.deriv(deg)(time_span)
+                test_val = fun(time_span)
 
                 err = nom_val - test_val
                 assert np.linalg.norm(err, ord=np.inf) < 1.0e-10
